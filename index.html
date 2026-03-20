@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Garage Cyberpunk</title>
+    <style>
+        .container { display: flex; flex-wrap: wrap; gap: 20px; }
+        .card { border: 1px solid #333; padding: 10px; width: 200px; text-align: center; }
+        .card img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+
+<h1>Liste des Véhicules</h1>
+<div id="gallery" class="container">
+</div>
+
+<script>
+    // On appelle le fichier PHP
+    fetch('get_vehicules.php')
+        .then(response => response.json())
+        .then(data => {
+            const gallery = document.getElementById('gallery');
+            data.forEach(vehicule => {
+                const card = `
+                        <div class="card">
+                            <img src="${vehicule.image_url}" alt="${vehicule.nom_modele}">
+                            <h3>${vehicule.marque} ${vehicule.nom_modele}</h3>
+                            <p>Catégorie : ${vehicule.categorie}</p>
+                        </div>
+                    `;
+                gallery.innerHTML += card;
+            });
+        });
+</script>
+</body>
+</html>
