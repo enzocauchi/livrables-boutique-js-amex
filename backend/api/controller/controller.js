@@ -1,29 +1,36 @@
-const { getCarById } = require('../model/model');
+// api/controller/controller.js
+const CarModel = require('../model/model');
 
-const getCarByID = (req, res) => {
-    const { id } = req.params;
+exports.getCarDetails = async (req, res) => {
+    const id = req.params.id;
 
-    // ✅ Vérification à l'entrée
-    if (!id || isNaN(id) || id <= 0) {
-        return res.status(400).json({ error: 'ID invalide' });
+    // 1. Validation de l'entrée
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "L'ID doit être un nombre." });
     }
 
     try {
-        const car = getCarById(Number(id)); // plus de await
+        // 2. Appel au modèle
+        const car = await CarModel.getCarByID(id);
 
-        // ✅ Vérification à la sortie
+        // 3. Validation de la sortie
         if (!car) {
-            return res.status(404).json({ error: 'Voiture non trouvée' });
+            return res.status(404).json({ message: "Voiture non trouvée." });
         }
 
-        res.status(200).json(car);
-
-} catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erreur serveur', detail: err.message }); // 👈 ajoute detail
-}
-
-
+        res.json(car);
+    } catch (err) {
+        console.error(err); // ← ajoute ça pour voir l'erreur réelle
+        res.status(500).json({ error: "Erreur lors de la récupération des données." });
+    }
 };
 
-module.exports = { getCarByID };
+exports.getAllCars = async (req, res) => {
+    try {
+        const cars = await CarModel.getAllCars();
+        res.json(cars);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+};

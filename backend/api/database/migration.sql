@@ -1,0 +1,23 @@
+CREATE DATABASE IF NOT EXISTS voiture_cyberpunk CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE voiture_cyberpunk;
+
+CREATE TABLE IF NOT EXISTS categories (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(255) NOT NULL UNIQUE
+    );
+
+CREATE TABLE IF NOT EXISTS constructeurs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(255) NOT NULL UNIQUE
+    );
+
+CREATE TABLE IF NOT EXISTS vehicules (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nom_modele VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    category_id INT,
+    constructeur_id INT,
+    prix DECIMAL(12) NOT NULL,
+    FOREIGN KEY(category_id) REFERENCES categories(id),
+    FOREIGN KEY(constructeur_id) REFERENCES constructeurs(id)
+    );
