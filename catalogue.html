@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 2077 - Catalogue</title>
+    <link rel="stylesheet" href="static/css/catalogue.css">
+</head>
+<body data-page="catalogue">
+<header>
+    <div><h1>CyberPunk 2077</h1></div>
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">A Propos</a>
+    </nav>
+    <div class="header-actions">
+        <button class="icon-button theme-toggle" type="button" aria-label="Changer le theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18"></path>
+                <path d="M12 3a9 9 0 1 0 0 18"></path>
+            </svg>
+        </button>
+        <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="19" r="1.5"></circle>
+                <circle cx="17" cy="19" r="1.5"></circle>
+                <path d="M3 5h2l2.3 9h9.7l2-7H7.3"></path>
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+        </a>
+    </div>
+</header>
+
+<main class="catalogue-page">
+    <section class="catalogue-hero">
+        <p class="eyebrow">// CATALOGUE COMPLET</p>
+        <h2>Choisis le vehicule qui correspond a ton style de conduite</h2>
+        <p>Recherche, trie et ajoute directement les modeles au panier depuis cette page.</p>
+    </section>
+
+    <section class="catalogue-toolbar">
+        <div class="search-shell">
+            <input id="catalogSearch" type="search" placeholder="Rechercher un modele, un constructeur ou une couleur">
+        </div>
+        <select id="sortSelect">
+            <option value="default">Tri par defaut</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix decroissant</option>
+            <option value="name-asc">Nom A-Z</option>
+        </select>
+    </section>
+
+    <section class="catalogue-grid" id="catalogueGrid"></section>
+</main>
+
+<script src="js/shared.js"></script>
+<script src="js/catalogue.js"></script>
+</body>
+</html>

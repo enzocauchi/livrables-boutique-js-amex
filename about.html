@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 2077 - A Propos</title>
+    <link rel="stylesheet" href="static/css/about.css">
+</head>
+<body data-page="about">
+<header>
+    <div><h1>CyberPunk 2077</h1></div>
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">A Propos</a>
+    </nav>
+    <div class="header-actions">
+        <button class="icon-button theme-toggle" type="button" aria-label="Changer le theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18"></path>
+                <path d="M12 3a9 9 0 1 0 0 18"></path>
+            </svg>
+        </button>
+        <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="19" r="1.5"></circle>
+                <circle cx="17" cy="19" r="1.5"></circle>
+                <path d="M3 5h2l2.3 9h9.7l2-7H7.3"></path>
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+        </a>
+    </div>
+</header>
+
+<main class="about-page">
+    <section class="intro">
+        <p class="eyebrow">// A PROPOS</p>
+        <h2>Un garage premium inspire de l'univers Cyberpunk</h2>
+        <p>Cette boutique met en scene une selection de vehicules de Night City avec galerie dynamique, variantes de couleurs et panier persistant.</p>
+    </section>
+
+    <section class="about-grid">
+        <article>
+            <h3>Direction visuelle</h3>
+            <p>Le site conserve ton langage graphique sombre, tranche jaune et cartes techniques, avec une declinaison claire disponible via le bouton de theme.</p>
+        </article>
+        <article>
+            <h3>Catalogue</h3>
+            <p>Chaque vehicule remonte depuis l'API avec ses variantes et ses sprites reeles pour afficher une fiche detaillee plus riche.</p>
+        </article>
+        <article>
+            <h3>Experience</h3>
+            <p>L'index sert de vitrine rapide, le catalogue sert au parcours d'achat, et le panier reste disponible sur toutes les pages.</p>
+        </article>
+    </section>
+
+    <section class="timeline">
+        <div>
+            <span>01</span>
+            <h4>Selection</h4>
+            <p>Choisis un modele, une couleur et inspecte ses sprites.</p>
+        </div>
+        <div>
+            <span>02</span>
+            <h4>Ajout panier</h4>
+            <p>Ajoute le vehicule directement depuis une carte ou une fiche detail.</p>
+        </div>
+        <div>
+            <span>03</span>
+            <h4>Validation</h4>
+            <p>Retrouve tous les vehicules choisis dans la page panier.</p>
+        </div>
+    </section>
+</main>
+
+<script src="js/shared.js"></script>
+<script src="js/about.js"></script>
+</body>
+</html>

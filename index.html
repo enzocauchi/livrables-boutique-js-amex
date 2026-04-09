@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="static/css/index.css">
 </head>
 
-<body>
+<body data-page="home">
 
 <!-- HEADER -->
 <header>
@@ -15,16 +15,32 @@
         <h1>CyberPunk 2077</h1>
     </div>
 
-    <div>
-        <h2>Home</h2>
-        <h2>Catalogue</h2>
-        <h2>A Propos</h2>
-    </div>
-
-    <div>
-        <img class="logo" src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search logo">
-        <img class="logo" src="" alt="changing site color">
-        <img class="logo" src="" alt="cart logo">
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">A Propos</a>
+    </nav>
+    <div class="header-actions">
+        <a class="icon-button" href="catalogue.html" aria-label="Rechercher">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6"></circle>
+                <path d="M20 20l-4.2-4.2"></path>
+            </svg>
+        </a>
+        <button class="icon-button theme-toggle" type="button" aria-label="Changer le theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18"></path>
+                <path d="M12 3a9 9 0 1 0 0 18"></path>
+            </svg>
+        </button>
+        <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="19" r="1.5"></circle>
+                <circle cx="17" cy="19" r="1.5"></circle>
+                <path d="M3 5h2l2.3 9h9.7l2-7H7.3"></path>
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+        </a>
     </div>
 </header>
 
@@ -48,33 +64,39 @@
 </section>
 
 <!-- SEARCH + FILTERS -->
-<section>
-
-    <a href="#">Rechercher un véhicule</a>
-
-    <div>
-        <h4>Tous</h4>
-        <h4>Arch</h4>
-        <h4>Brennan</h4>
-        <h4>Yaiba</h4>
-        <h4>Archer</h4>
-        <h4>Chevillon</h4>
-        <h4>Herrera</h4>
-        <h4>Mahir</h4>
-        <h4>Makigai</h4>
-        <h4>Militech</h4>
-        <h4>Mizutani</h4>
-        <h4>Porsche</h4>
-        <h4>Quadra</h4>
-        <h4>Rayfield</h4>
-        <h4>Thorton</h4>
-        <h4>Villefort</h4>
+<section class="filters-section">
+    <div class="search-shell">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6"></circle>
+            <path d="M20 20l-4.2-4.2"></path>
+        </svg>
+        <input id="searchInput" type="search" placeholder="Rechercher un vehicule, un constructeur, une couleur">
     </div>
 
-    <div>
-        <h4>Filtre</h4>
+    <div class="filter-bar">
+        <div class="filter-summary">
+            <span class="filter-label">Filtre actif</span>
+            <strong id="activeFilterLabel">Tous les constructeurs</strong>
+        </div>
+        <div class="filter-pills" id="brandFilters">
+            <button class="filter-pill active" type="button" data-brand="Tous">Tous</button>
+            <button class="filter-pill" type="button" data-brand="Arch">Arch</button>
+            <button class="filter-pill" type="button" data-brand="Brennan">Brennan</button>
+            <button class="filter-pill" type="button" data-brand="Yaiba">Yaiba</button>
+            <button class="filter-pill" type="button" data-brand="Archer">Archer</button>
+            <button class="filter-pill" type="button" data-brand="Chevillon">Chevillon</button>
+            <button class="filter-pill" type="button" data-brand="Herrera">Herrera</button>
+            <button class="filter-pill" type="button" data-brand="Mahir">Mahir</button>
+            <button class="filter-pill" type="button" data-brand="Makigai">Makigai</button>
+            <button class="filter-pill" type="button" data-brand="Militech">Militech</button>
+            <button class="filter-pill" type="button" data-brand="Mizutani">Mizutani</button>
+            <button class="filter-pill" type="button" data-brand="Porsche">Porsche</button>
+            <button class="filter-pill" type="button" data-brand="Quadra">Quadra</button>
+            <button class="filter-pill" type="button" data-brand="Rayfield">Rayfield</button>
+            <button class="filter-pill" type="button" data-brand="Thorton">Thorton</button>
+            <button class="filter-pill" type="button" data-brand="Villefort">Villefort</button>
+        </div>
     </div>
-
 </section>
 
 <!-- GRID DYNAMIQUE -->
@@ -82,12 +104,12 @@
 
     <p class="results">OBJETS TROUVÉS</p>
 
-    <!-- 🔥 IMPORTANT : GRID VIDE -->
     <div class="grid" id="carGrid"></div>
 
 </div>
 
 <!-- SCRIPT -->
+<script src="js/shared.js"></script>
 <script src="js/main.js"></script>
 
 </body>

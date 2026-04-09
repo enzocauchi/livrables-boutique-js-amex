@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 2077 - Panier</title>
+    <link rel="stylesheet" href="static/css/cart.css">
+</head>
+<body data-page="cart">
+<header>
+    <div><h1>CyberPunk 2077</h1></div>
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">A Propos</a>
+    </nav>
+    <div class="header-actions">
+        <button class="icon-button theme-toggle" type="button" aria-label="Changer le theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18"></path>
+                <path d="M12 3a9 9 0 1 0 0 18"></path>
+            </svg>
+        </button>
+        <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="19" r="1.5"></circle>
+                <circle cx="17" cy="19" r="1.5"></circle>
+                <path d="M3 5h2l2.3 9h9.7l2-7H7.3"></path>
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+        </a>
+    </div>
+</header>
+
+<main class="cart-page">
+    <section class="cart-hero">
+        <p class="eyebrow">// PANIER</p>
+        <h2>Previsualise ta flotte avant validation</h2>
+    </section>
+
+    <section class="cart-layout">
+        <div class="cart-items" id="cartItems"></div>
+        <aside class="cart-summary">
+            <h3>Resume</h3>
+            <div class="summary-row">
+                <span>Vehicules</span>
+                <strong id="summaryCount">0</strong>
+            </div>
+            <div class="summary-row">
+                <span>Total</span>
+                <strong id="summaryTotal">¥0</strong>
+            </div>
+            <a class="checkout-link" href="catalogue.html">Continuer mes achats</a>
+        </aside>
+    </section>
+</main>
+
+<script src="js/shared.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>
