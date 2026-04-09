@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS vehicules (
     FOREIGN KEY(category_id) REFERENCES categories(id),
     FOREIGN KEY(constructeur_id) REFERENCES constructeurs(id)
     );
+
+CREATE TABLE IF NOT EXISTS variantes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    vehicule_id INT NOT NULL,
+    nom VARCHAR(100) NOT NULL,
+    FOREIGN KEY (vehicule_id) REFERENCES vehicules(id) ON DELETE CASCADE
+    );
