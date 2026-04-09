@@ -1,49 +1,98 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const gallery = document.getElementById('gallery');
+// Sélection de la grille où seront ajoutées les cartes
+const grid = document.querySelector('.grid');
+const resultsText = document.querySelector('.results');
 
-    // On appelle ton API PHP
-    fetch('get_vehicules.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erreur réseau : Impossible de joindre get_vehicules.php");
-            }
-            return response.json();
-        })
-        .then(data => {
-            // On vide le message de chargement
-            gallery.innerHTML = "";
+// Fonction pour créer une carte HTML pour un véhicule
+function createCard(car) {
+    // Déterminer le badge selon la rareté (optionnel)
+    const rarity = car.rarity || 'LÉGENDAIRE'; // par défaut
+    const badgeClass = rarity.toLowerCase();
 
-            if (data.length === 0) {
-                gallery.innerHTML = "<p>Aucun véhicule trouvé dans la base de données.</p>";
-                return;
-            }
+    const card = document.createElement('div');
+    card.className = 'card';
 
-            data.forEach(vehicule => {
-                // Création de l'élément carte
-                const card = document.createElement('div');
-                card.className = 'card';
+    // Badge
+    const badge = document.createElement('span');
+    badge.className = `badge ${badgeClass}`;
+    badge.textContent = rarity.toUpperCase();
+    card.appendChild(badge);
 
-                /* Correction dynamique du chemin :
-                   Si tes données SQL ont "static/images/..." (minuscule)
-                   on force "static/Images/..." (Majuscule) pour coller à ton dossier
-                */
-                let imgPath = vehicule.image_url;
-                if (imgPath.includes('static/images/')) {
-                    imgPath = imgPath.replace('static/images/', 'static/Images/');
-                }
+    // Image
+    const img = document.createElement('img');
+    img.src = car.image_url.startsWith('http') ? car.image_url : `/static/${car.image_url}`;
+    img.alt = car.nom_modele;
+    card.appendChild(img);
 
-                card.innerHTML = `
-                    <img src="${imgPath}" alt="${vehicule.nom_modele}" 
-                         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x170?text=Image+Introuvable';">
-                    <h3>${vehicule.nom_modele}</h3>
-                    <p>${vehicule.marque.toUpperCase()} • ${vehicule.categorie}</p>
-                `;
+    // Contenu
+    const content = document.createElement('div');
+    content.className = 'content';
 
-                gallery.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error("Erreur Fetch :", error);
-            gallery.innerHTML = `<p style="color:red;">Erreur de chargement : ${error.message}</p>`;
+    const title = document.createElement('h3');
+    title.textContent = car.nom_modele;
+    content.appendChild(title);
+
+    const desc = document.createElement('p');
+    desc.textContent = car.description || 'Description non disponible...';
+    content.appendChild(desc);
+
+    // Note (optionnel)
+    const rating = document.createElement('div');
+    rating.className = 'rating';
+    rating.textContent = `⭐ ${car.rating || '4.9'} (${car.reviews || 0})`;
+    content.appendChild(rating);
+
+    // Bas de carte : prix + bouton
+    const bottom = document.createElement('div');
+    bottom.className = 'bottom';
+
+    const price = document.createElement('span');
+    price.className = 'price';
+    price.textContent = `¥${car.price || '0'}`;
+    bottom.appendChild(price);
+
+    const btn = document.createElement('button');
+    btn.textContent = 'ACQUÉRIR';
+    btn.disabled = car.locked || false;
+    bottom.appendChild(btn);
+
+    content.appendChild(bottom);
+    card.appendChild(content);
+
+    // Si véhicule verrouillé
+    if (car.locked) {
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        overlay.textContent = '🔒 INDISPONIBLE';
+        card.appendChild(overlay);
+        card.classList.add('locked');
+    }
+
+    return card;
+}
+
+// Fonction pour récupérer les véhicules depuis l'API
+async function fetchCars() {
+    try {
+        // Pour toutes les voitures, on peut créer une route /api/voitures
+        const response = await fetch('/api/voitures');
+        const cars = await response.json();
+
+        // Mettre à jour le texte du nombre d'objets trouvés
+        resultsText.textContent = `${cars.length} OBJETS TROUVÉS`;
+
+        // Vider la grille avant de remplir
+        grid.innerHTML = '';
+
+        // Ajouter chaque voiture dans la grille
+        cars.forEach(car => {
+            const card = createCard(car);
+            grid.appendChild(card);
         });
-});
+    } catch (err) {
+        console.error('Erreur lors du fetch des voitures :', err);
+        grid.innerHTML = '<p>Impossible de charger les véhicules.</p>';
+    }
+}
+
+// Appel initial pour afficher les voitures
+fetchCars();

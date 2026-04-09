@@ -2,36 +2,93 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Garage Cyberpunk</title>
-    <style>
-        .container { display: flex; flex-wrap: wrap; gap: 20px; }
-        .card { border: 1px solid #333; padding: 10px; width: 200px; text-align: center; }
-        .card img { max-width: 100%; height: auto; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 2077 - Garage</title>
+    <link rel="stylesheet" href="static/css/index.css">
 </head>
+
 <body>
 
-<h1>Liste des Véhicules</h1>
-<div id="gallery" class="container">
+<!-- HEADER -->
+<header>
+    <div>
+        <h1>CyberPunk 2077</h1>
+    </div>
+
+    <div>
+        <h2>Home</h2>
+        <h2>Catalogue</h2>
+        <h2>A Propos</h2>
+    </div>
+
+    <div>
+        <img class="logo" src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search logo">
+        <img class="logo" src="" alt="changing site color">
+        <img class="logo" src="" alt="cart logo">
+    </div>
+</header>
+
+<!-- HERO -->
+<section>
+    <div class="space bar"></div>
+    <p>// MARCHÉ SOUTERRAIN</p>
+
+    <div>
+        <h3>la boutique de <span>Vehicules</span></h3>
+    </div>
+
+    <div>
+        <h3>de Cyberpunk</h3>
+    </div>
+
+    <p>
+        Armes légendaires, implants de combat, artefacts de l'ère perdue.
+        Tout ce dont vous avez besoin pour survivre dans les méga-cités du futur.
+    </p>
+</section>
+
+<!-- SEARCH + FILTERS -->
+<section>
+
+    <a href="#">Rechercher un véhicule</a>
+
+    <div>
+        <h4>Tous</h4>
+        <h4>Arch</h4>
+        <h4>Brennan</h4>
+        <h4>Yaiba</h4>
+        <h4>Archer</h4>
+        <h4>Chevillon</h4>
+        <h4>Herrera</h4>
+        <h4>Mahir</h4>
+        <h4>Makigai</h4>
+        <h4>Militech</h4>
+        <h4>Mizutani</h4>
+        <h4>Porsche</h4>
+        <h4>Quadra</h4>
+        <h4>Rayfield</h4>
+        <h4>Thorton</h4>
+        <h4>Villefort</h4>
+    </div>
+
+    <div>
+        <h4>Filtre</h4>
+    </div>
+
+</section>
+
+<!-- GRID DYNAMIQUE -->
+<div class="container">
+
+    <p class="results">OBJETS TROUVÉS</p>
+
+    <!-- 🔥 IMPORTANT : GRID VIDE -->
+    <div class="grid" id="carGrid"></div>
+
 </div>
 
-<script>
-    // On appelle le fichier PHP
-    fetch('get_vehicules.php')
-        .then(response => response.json())
-        .then(data => {
-            const gallery = document.getElementById('gallery');
-            data.forEach(vehicule => {
-                const card = `
-                        <div class="card">
-                            <img src="${vehicule.image_url}" alt="${vehicule.nom_modele}">
-                            <h3>${vehicule.marque} ${vehicule.nom_modele}</h3>
-                            <p>Catégorie : ${vehicule.categorie}</p>
-                        </div>
-                    `;
-                gallery.innerHTML += card;
-            });
-        });
-</script>
+<!-- SCRIPT -->
+<script src="js/main.js"></script>
+
 </body>
 </html>
