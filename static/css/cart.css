@@ -46,7 +46,7 @@ body[data-page="cart"] .header-nav a[href="cart.html"], .header-nav a:hover { co
 .promo-tag { color: var(--accent); font-size: 12px; border: 1px solid var(--accent); border-radius: 999px; padding: 4px 8px; }
 .item-actions { display: flex; gap: 10px; align-items: center; }
 .item-actions button { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; }
-.delivery-form {
+.delivery-form { min-width: 0;
     display: grid;
     gap: 10px;
     padding-bottom: 14px;

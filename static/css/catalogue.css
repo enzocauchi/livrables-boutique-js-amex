@@ -79,7 +79,7 @@ body[data-page="catalogue"] .header-nav a[href="catalogue.html"], .header-nav a:
 .catalog-body p { color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
 .catalog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; color: var(--accent); }
 .catalog-promo { color: var(--accent); font-size: 13px; margin-bottom: 12px; }
-.catalog-actions { display: flex; gap: 10px; }
+.catalog-actions { display: flex; gap: 10px; align-items: flex-start; }
 .catalog-actions button, .catalog-actions a {
     flex: 1; min-height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
     text-decoration: none; border: 1px solid var(--line); background: var(--bg-soft); color: var(--text); cursor: pointer;

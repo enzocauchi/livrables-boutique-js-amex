@@ -53,7 +53,7 @@ function renderSpriteStrip(variant) {
     sprites.forEach((sprite, index) => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `sprite-card${index === 0 ? ' active' : ''}`;
+        button.className = `sprite-card${index === activeSpriteIndex ? ' active' : ''}`;
         button.innerHTML = `
             <img src="${getAssetUrl(sprite)}" alt="${currentCar.nom_modele} ${variant.nom} sprite ${index + 1}">
             <span>Sprite ${index + 1}</span>
