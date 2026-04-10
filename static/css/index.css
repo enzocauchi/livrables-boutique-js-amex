@@ -249,6 +249,7 @@ section p:last-child {
     gap: 10px;
     overflow-x: auto;
     padding-bottom: 4px;
+    padding-top: 4px;
 }
 
 .filter-pill {

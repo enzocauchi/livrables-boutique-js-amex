@@ -61,6 +61,7 @@ body[data-page="cart"] .header-nav a[href="cart.html"], .header-nav a:hover { co
     grid-template-columns: 1fr auto;
     gap: 8px;
     margin-bottom: 8px;
+    width: 30px;
 }
 
 .address-select {
@@ -71,6 +72,7 @@ body[data-page="cart"] .header-nav a[href="cart.html"], .header-nav a:hover { co
     color: var(--text);
     padding: 0 10px;
     font-size: 14px;
+    width: 195px;
 }
 
 .load-address-btn {
@@ -120,4 +122,5 @@ body[data-page="cart"] .header-nav a[href="cart.html"], .header-nav a:hover { co
     .form-row { gap: 8px; }
     .remember-address { font-size: 12px; }
     .checkout-link, .secondary-link { min-height: 44px; font-size: 14px; }
+    .address-select { width: 235px; }
 }

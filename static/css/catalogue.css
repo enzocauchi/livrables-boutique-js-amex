@@ -74,12 +74,12 @@ body[data-page="catalogue"] .header-nav a[href="catalogue.html"], .header-nav a:
 .catalog-card { position: relative; }
 .catalog-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
 .catalog-favorite { position: absolute; top: 14px; right: 14px; z-index: 1; }
-.catalog-body { padding: 18px; }
+.catalog-body { padding: 18px; display: flex; flex-direction: column; }
 .catalog-body h3 { margin-bottom: 8px; }
 .catalog-body p { color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
 .catalog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; color: var(--accent); }
 .catalog-promo { color: var(--accent); font-size: 13px; margin-bottom: 12px; }
-.catalog-actions { display: flex; gap: 10px; align-items: flex-start; }
+.catalog-actions { display: flex; gap: 10px; align-items: flex-start; margin-top: auto; }
 .catalog-actions button, .catalog-actions a {
     flex: 1; min-height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
     text-decoration: none; border: 1px solid var(--line); background: var(--bg-soft); color: var(--text); cursor: pointer;
