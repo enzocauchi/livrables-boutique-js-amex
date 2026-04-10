@@ -1,0 +1,55 @@
+<>
+
+
+  <meta charSet="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberPunk 2077 — Connexion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="connection.css" />
+
+
+ 
+  <div className="card">
+    { /* Coins décoratifs */ }
+    <div className="corner tl" />
+    <div className="corner tr" />
+    <div className="corner bl" />
+    <div className="corner br" />
+ 
+    { /* Formulaire de connexion */ }
+    <div id="login-form">
+      <p className="tag">CyberPunk 2077</p>
+      <h1 className="title">Connexion</h1>
+ 
+      <div id="msg-error" className="msg error" />
+      <div id="msg-success" className="msg success" />
+ 
+      <div className="field">
+        <label htmlFor="username">Identifiant</label>
+        <input type="text" id="username" placeholder="ex: V_2077" autoComplete="username" />
+      </div>
+ 
+      <div className="field">
+        <label htmlFor="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" autoComplete="current-password" />
+      </div>
+ 
+      <button className="btn-primary" id="login-btn">// Accéder au système</button>
+ 
+      <p className="hint">test : admin / 1234</p>
+    </div>
+ 
+    { /* Vue connectée */ }
+    <div id="dashboard">
+      <div className="avatar-initials" id="avatar">V</div>
+      <p className="welcome-name" id="welcome-name" />
+      <p className="welcome-sub">// accès autorisé</p>
+      <hr className="divider" />
+      <button className="btn-outline" id="logout-btn">// Déconnexion</button>
+    </div>
+  </div>
+ 
+  <script src="script.js" />
+
+</>

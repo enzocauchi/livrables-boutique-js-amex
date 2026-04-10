@@ -1,0 +1,232 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --yellow:      #f5c518;
+  --yellow-hover:#ffd740;
+  --bg:          #0d1117;
+  --border:      #f5c518;
+  --text:        #ffffff;
+  --muted:       #555;
+  --error:       #ff4444;
+  --font-main:   'Rajdhani', sans-serif;
+  --font-mono:   'Share Tech Mono', monospace;
+}
+
+body {
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-main);
+  color: var(--text);
+  background-image:
+    linear-gradient(rgba(245, 197, 24, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 197, 24, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Carte ── */
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem 2rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  animation: fadeIn 0.4s ease both;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 30px;
+  width: 60px; height: 3px;
+  background: var(--bg);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: 30px;
+  width: 60px; height: 3px;
+  background: var(--bg);
+}
+
+/* ── Coins ── */
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--yellow);
+  border-style: solid;
+}
+.corner.tl { top: -2px;    left: -2px;  border-width: 2px 0 0 2px; }
+.corner.tr { top: -2px;    right: -2px; border-width: 2px 2px 0 0; }
+.corner.bl { bottom: -2px; left: -2px;  border-width: 0 0 2px 2px; }
+.corner.br { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
+
+/* ── En-tête ── */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text);
+  margin-bottom: 2rem;
+  line-height: 1;
+}
+
+/* ── Messages ── */
+.msg {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 8px 10px;
+  margin-bottom: 1rem;
+  border-left-width: 2px;
+  border-left-style: solid;
+}
+.msg.error   { color: var(--error);  border-color: var(--error);  background: rgba(255, 68, 68, 0.05); }
+.msg.success { color: var(--yellow); border-color: var(--yellow); background: rgba(245, 197, 24, 0.05); }
+
+/* ── Champs ── */
+.field {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  padding: 8px 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-bottom-color: var(--yellow);
+}
+input::placeholder {
+  color: #3a3a3a;
+  font-size: 14px;
+}
+
+/* ── Boutons ── */
+.btn-primary {
+  width: 100%;
+  background: var(--yellow);
+  color: var(--bg);
+  border: none;
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 13px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover  { background: var(--yellow-hover); }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-outline {
+  width: 100%;
+  background: transparent;
+  color: var(--yellow);
+  border: 1px solid var(--yellow);
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 0.75rem;
+  transition: background 0.15s;
+}
+.btn-outline:hover { background: rgba(245, 197, 24, 0.08); }
+
+/* ── Hint ── */
+.hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1rem;
+  letter-spacing: 1px;
+}
+
+/* ── Dashboard ── */
+#dashboard {
+  display: none;
+  text-align: center;
+}
+
+.avatar-initials {
+  font-family: var(--font-mono);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--yellow);
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-name {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.welcome-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #1e2530;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Animation ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
