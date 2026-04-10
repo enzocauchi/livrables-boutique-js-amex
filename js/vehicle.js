@@ -53,7 +53,7 @@ function renderSpriteStrip(variant) {
     sprites.forEach((sprite, index) => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `sprite-card${index === 0 ? ' active' : ''}`;
+        button.className = `sprite-card${index === activeSpriteIndex ? ' active' : ''}`;
         button.innerHTML = `
             <img src="${getAssetUrl(sprite)}" alt="${currentCar.nom_modele} ${variant.nom} sprite ${index + 1}">
             <span>Sprite ${index + 1}</span>
@@ -140,7 +140,7 @@ function renderVehicle(car) {
                         <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
                     </svg>
                 </button>
-                <button class="primary-action" type="button">Ajouter au panier</button>
+                <button class="primary-action" type="button" ${Number(car.stock_quantity) <= 0 ? 'disabled' : ''}>${Number(car.stock_quantity) <= 0 ? 'Rupture' : 'Ajouter au panier'}</button>
                 <a class="secondary-action" href="catalogue.html">Retour catalogue</a>
             </div>
             <div class="stats-grid">
@@ -185,20 +185,26 @@ function renderVehicle(car) {
 
     page.querySelector('.primary-action').addEventListener('click', (event) => {
         const variant = getActiveVariant();
+        
+        if (Number(currentCar.stock_quantity) <= 0) {
+            return;
+        }
+        
         BoutiqueApp.addToCart(
             {
-                ...car,
-                base_price: Number(car.prix),
-                promotion_percent: Number(car.promotion_percent || 0),
-                prix: BoutiqueApp.getFinalPrice(car.prix, variant?.nom || 'De base', car.promotion_percent),
-                image_url: variant?.sprites?.[0] || variant?.image_url || car.image_url
+                ...currentCar,
+                base_price: Number(currentCar.prix),
+                promotion_percent: Number(currentCar.promotion_percent || 0),
+                prix: BoutiqueApp.getFinalPrice(currentCar.prix, variant?.nom || 'De base', currentCar.promotion_percent),
+                image_url: variant?.sprites?.[0] || variant?.image_url || currentCar.image_url
             },
             variant?.nom || 'De base'
         );
 
-        event.currentTarget.textContent = 'Ajoute au panier';
+        const originalText = event.currentTarget.textContent;
+        event.currentTarget.textContent = 'Ajoute ✓';
         window.setTimeout(() => {
-            event.currentTarget.textContent = 'Ajouter au panier';
+            event.currentTarget.textContent = originalText;
         }, 1200);
     });
 

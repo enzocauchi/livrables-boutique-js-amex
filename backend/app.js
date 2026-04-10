@@ -18,11 +18,19 @@ app.use((req, res, next) => {
 // Le dossier static est a la racine du projet, pas dans backend/.
 app.use("/static", express.static(path.join(__dirname, "..", "static")));
 
+// Servir les fichiers HTML et autres fichiers statiques racine
+app.use(express.static(path.join(__dirname, "..")));
+
 // Parser le JSON dans les requêtes
 app.use(express.json());
 
 // Utiliser le router pour les routes API
 app.use('/api', router); // → GET /api/voiture/:id
+
+// Fallback: servir index.html pour les routes non-API (SPA fallback)
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
 
 // Lancer le serveur sur le port 8080
 app.listen(8080, () => {

@@ -3,6 +3,7 @@ const BoutiqueApp = (() => {
     const CART_KEY = 'garage-cart';
     const FAVORITES_KEY = 'garage-favorites';
     const ADDRESS_KEY = 'garage-address';
+    const SAVED_ADDRESSES_KEY = 'garage-saved-addresses';
     const VARIANT_PRICE_OFFSETS = {
         'De base': 0,
         Bleu: 125000,
@@ -168,6 +169,34 @@ const BoutiqueApp = (() => {
         localStorage.setItem(ADDRESS_KEY, JSON.stringify(address));
     }
 
+    function getSavedAddresses() {
+        try {
+            return JSON.parse(localStorage.getItem(SAVED_ADDRESSES_KEY) || '[]');
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function addSavedAddress(address) {
+        const addresses = getSavedAddresses();
+        const addressStr = JSON.stringify(address);
+        const exists = addresses.some((addr) => JSON.stringify(addr) === addressStr);
+        if (!exists) {
+            addresses.push(address);
+            localStorage.setItem(SAVED_ADDRESSES_KEY, JSON.stringify(addresses));
+        }
+    }
+
+    function deleteSavedAddress(index) {
+        const addresses = getSavedAddresses();
+        addresses.splice(index, 1);
+        localStorage.setItem(SAVED_ADDRESSES_KEY, JSON.stringify(addresses));
+    }
+
+    function loadAddressFromHistory(address) {
+        saveAddress(address);
+    }
+
     return {
         API_ROOTS,
         addToCart,
@@ -189,6 +218,10 @@ const BoutiqueApp = (() => {
         saveFavorites,
         toggleFavorite,
         updateCartCount,
-        updateFavoriteCount
+        updateFavoriteCount,
+        getSavedAddresses,
+        addSavedAddress,
+        deleteSavedAddress,
+        loadAddressFromHistory
     };
 })();

@@ -27,4 +27,16 @@ connexion.connect((err) => {
     });
 });
 
+connexion.beginTransaction = function(callback) {
+    this.query('START TRANSACTION', callback);
+};
+
+connexion.commit = function(callback) {
+    this.query('COMMIT', callback);
+};
+
+connexion.rollback = function(callback) {
+    this.query('ROLLBACK', callback);
+};
+
 module.exports = connexion;

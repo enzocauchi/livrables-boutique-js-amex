@@ -249,6 +249,7 @@ section p:last-child {
     gap: 10px;
     overflow-x: auto;
     padding-bottom: 4px;
+    padding-top: 4px;
 }
 
 .filter-pill {
@@ -455,5 +456,41 @@ img {
     .filter-summary {
         flex-direction: column;
         align-items: start;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    header,
+    section,
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .content {
+        flex: 1;
+    }
+
+    .space.bar {
+        min-height: 30px;
     }
 }

@@ -15,6 +15,8 @@ const fields = {
     country: document.querySelector('#country')
 };
 const rememberAddress = document.querySelector('#rememberAddress');
+const savedAddressSelect = document.querySelector('#savedAddressSelect');
+const loadAddressButton = document.querySelector('#loadAddressButton');
 const API_CANDIDATES = BoutiqueApp.API_ROOTS.map((root) => `${root}/api/commandes`);
 
 function getAddressPayload() {
@@ -38,9 +40,34 @@ function hydrateAddress() {
     fields.country.value = savedAddress.country || '';
 }
 
+function populateSavedAddresses() {
+    const addresses = BoutiqueApp.getSavedAddresses();
+    savedAddressSelect.innerHTML = '<option value="">Ou utiliser une adresse sauvegardee</option>';
+    addresses.forEach((address, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${address.line1}, ${address.postalCode} ${address.city}`;
+        savedAddressSelect.appendChild(option);
+    });
+}
+
+function loadSelectedAddress() {
+    if (savedAddressSelect.value === '') return;
+    const addresses = BoutiqueApp.getSavedAddresses();
+    const address = addresses[parseInt(savedAddressSelect.value)];
+    if (address) {
+        BoutiqueApp.loadAddressFromHistory(address);
+        hydrateAddress();
+        savedAddressSelect.value = '';
+    }
+}
+
 function persistAddressIfNeeded() {
+    const address = getAddressPayload();
     if (rememberAddress.checked) {
-        BoutiqueApp.saveAddress(getAddressPayload());
+        BoutiqueApp.saveAddress(address);
+        BoutiqueApp.addSavedAddress(address);
+        populateSavedAddresses();
     } else {
         BoutiqueApp.saveAddress({});
     }
@@ -203,7 +230,9 @@ BoutiqueApp.applySavedTheme();
 BoutiqueApp.initThemeToggle();
 BoutiqueApp.updateFavoriteCount();
 hydrateAddress();
+populateSavedAddresses();
 Object.values(fields).forEach((field) => field.addEventListener('input', persistAddressIfNeeded));
 rememberAddress.addEventListener('change', persistAddressIfNeeded);
+loadAddressButton.addEventListener('click', loadSelectedAddress);
 checkoutButton.addEventListener('click', submitOrder);
 renderCart();

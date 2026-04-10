@@ -53,3 +53,29 @@ body.light-theme {
     text-decoration: none;
     font-weight: bold;
 }
+
+@media (max-width: 768px) {
+    .error-page {
+        padding: 30px 16px;
+        gap: 12px;
+        min-height: calc(100vh - 70px);
+    }
+
+    .error-code {
+        font-size: clamp(56px, 10vw, 120px);
+    }
+
+    .error-page h2 {
+        font-size: clamp(24px, 4vw, 40px);
+    }
+
+    .error-page p {
+        font-size: 14px;
+    }
+
+    .error-link {
+        min-height: 44px;
+        padding: 0 16px;
+        font-size: 14px;
+    }
+}
