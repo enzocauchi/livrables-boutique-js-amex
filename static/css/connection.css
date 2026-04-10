@@ -251,3 +251,34 @@ body[data-page="connection"] .header-nav a[href="index.html"], .header-nav a:hov
     .form-group input { min-height: 40px; }
     .primary-action, .secondary-action { min-height: 44px; }
 }
+
+.form-footer {
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+}
+
+.form-footer p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.link-button:hover {
+    color: var(--accent-strong) || #ffb800;
+}

@@ -51,6 +51,7 @@
             <p class="eyebrow">// AUTHENTIFICATION</p>
             <h1>Connexion</h1>
 
+            <!-- Formulaire de connexion -->
             <div id="login-form" class="login-form">
                 <div id="msg-error" class="message error"></div>
                 <div id="msg-success" class="message success"></div>
@@ -68,8 +69,47 @@
                 <button class="primary-action" id="login-btn" type="button">Accéder au système</button>
 
                 <p class="hint">Demo: admin / 1234</p>
+                
+                <div class="form-footer">
+                    <p>Pas encore de compte ?</p>
+                    <button class="link-button" id="toggle-signup-btn" type="button">Créer un compte</button>
+                </div>
             </div>
 
+            <!-- Formulaire d'inscription -->
+            <div id="signup-form" class="login-form" style="display: none;">
+                <div id="msg-error-signup" class="message error"></div>
+                <div id="msg-success-signup" class="message success"></div>
+
+                <div class="form-group">
+                    <label for="signup-username">Identifiant</label>
+                    <input type="text" id="signup-username" placeholder="Choisissez un identifiant" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="Votre adresse email" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Mot de passe</label>
+                    <input type="password" id="signup-password" placeholder="Créez un mot de passe" autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password-confirm">Confirmer le mot de passe</label>
+                    <input type="password" id="signup-password-confirm" placeholder="Confirmez votre mot de passe" autocomplete="new-password">
+                </div>
+
+                <button class="primary-action" id="signup-btn" type="button">Créer mon compte</button>
+
+                <div class="form-footer">
+                    <p>Vous avez déjà un compte ?</p>
+                    <button class="link-button" id="toggle-login-btn" type="button">Se connecter</button>
+                </div>
+            </div>
+
+            <!-- Dashboard après connexion -->
             <div id="dashboard" class="dashboard" style="display: none;">
                 <div class="avatar-container">
                     <div class="avatar" id="avatar"></div>
