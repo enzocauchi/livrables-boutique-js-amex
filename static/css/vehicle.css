@@ -407,6 +407,58 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
     }
 }
 
+@media (max-width: 768px) {
+    header,
+    .vehicle-page {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .vehicle-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hero-image {
+        height: 280px;
+    }
+
+    .sprite-strip {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+    }
+
+    .sprite-card {
+        height: 80px;
+    }
+
+    .color-buttons {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .color-button {
+        flex: 1;
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .add-to-cart-button {
+        min-height: 40px;
+        font-size: 14px;
+    }
+
+    .detail-card {
+        padding: 16px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
 @media (max-width: 720px) {
     .sprite-strip,
     .stats-grid {

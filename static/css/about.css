@@ -47,3 +47,11 @@ body[data-page="about"] .header-nav a[href="about.html"], .header-nav a:hover { 
     header, .about-grid, .timeline { grid-template-columns: 1fr; flex-wrap: wrap; }
     .about-grid, .timeline { display: grid; }
 }
+
+@media (max-width: 768px) {
+    header, .about-page { padding-left: 16px; padding-right: 16px; }
+    .intro h2 { font-size: clamp(24px, 3vw, 40px); }
+    .about-grid, .timeline { grid-template-columns: 1fr; gap: 16px; }
+    .about-grid article, .timeline div { padding: 20px; border-radius: 16px; }
+    .timeline span { width: 32px; height: 32px; font-size: 12px; }
+}

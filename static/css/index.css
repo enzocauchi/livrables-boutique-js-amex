@@ -456,4 +456,40 @@ img {
         flex-direction: column;
         align-items: start;
     }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    header,
+    section,
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .content {
+        flex: 1;
+    }
+
+    .space.bar {
+        min-height: 30px;
+    }
 }
