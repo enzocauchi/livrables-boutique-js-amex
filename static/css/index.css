@@ -354,6 +354,14 @@ section p:last-child {
     font-size: 18px;
 }
 
+.promo-chip {
+    font-size: 12px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 4px 8px;
+}
+
 .card-action {
     display: inline-flex;
     align-items: center;
@@ -364,6 +372,11 @@ section p:last-child {
     padding: 8px 12px;
     border-radius: 10px;
     transition: background 0.2s ease, color 0.2s ease;
+}
+
+.card-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .card:hover .card-action {

@@ -51,6 +51,7 @@ function createCard(car) {
     const defaultVariant = BoutiqueApp.getDefaultVariant(car);
     const defaultImage = BoutiqueApp.getPrimaryImage(car, 'De base');
     const isFavorite = BoutiqueApp.isFavorite(car.id);
+    const finalPrice = BoutiqueApp.getFinalPrice(car.prix, defaultVariant?.nom || 'De base', car.promotion_percent);
 
     const card = document.createElement('article');
     card.className = 'card';
@@ -111,7 +112,7 @@ function createCard(car) {
 
     const rating = document.createElement('div');
     rating.className = 'rating';
-    rating.textContent = `${Array.isArray(car.variantes) ? car.variantes.length : 0} variantes disponibles`;
+    rating.textContent = `${Array.isArray(car.variantes) ? car.variantes.length : 0} variantes • Stock ${car.stock_quantity}`;
     content.appendChild(rating);
 
     const bottom = document.createElement('div');
@@ -119,20 +120,30 @@ function createCard(car) {
 
     const price = document.createElement('span');
     price.className = 'price';
-    price.textContent = `¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, defaultVariant?.nom || 'De base'))}`;
+    price.textContent = `¥${BoutiqueApp.formatPrice(finalPrice)}`;
     bottom.appendChild(price);
+
+    if (Number(car.promotion_percent || 0) > 0) {
+        const promo = document.createElement('span');
+        promo.className = 'promo-chip';
+        promo.textContent = `-${car.promotion_percent}%`;
+        bottom.appendChild(promo);
+    }
 
     const btn = document.createElement('button');
     btn.className = 'card-action';
     btn.type = 'button';
-    btn.textContent = 'Ajouter';
+    btn.textContent = Number(car.stock_quantity) > 0 ? 'Ajouter' : 'Rupture';
+    btn.disabled = Number(car.stock_quantity) <= 0;
     btn.addEventListener('click', (event) => {
         event.stopPropagation();
         const variant = defaultVariant?.nom || 'De base';
         BoutiqueApp.addToCart(
             {
                 ...car,
-                prix: BoutiqueApp.getVariantPrice(car.prix, variant),
+                base_price: Number(car.prix),
+                promotion_percent: Number(car.promotion_percent || 0),
+                prix: BoutiqueApp.getFinalPrice(car.prix, variant, car.promotion_percent),
                 image_url: defaultImage || car.image_url
             },
             variant
@@ -205,8 +216,7 @@ async function fetchCars() {
         }
     }
 
-    resultsText.textContent = 'ERREUR DE CHARGEMENT';
-    grid.innerHTML = `<p>Impossible de charger les vehicules : ${lastError?.message || 'Erreur inconnue'}</p>`;
+    window.location.href = `api-error.html?message=${encodeURIComponent(lastError?.message || 'Erreur API')}`;
 }
 
 BoutiqueApp.applySavedTheme();

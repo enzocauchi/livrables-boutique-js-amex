@@ -4,6 +4,11 @@ const db = require('../database/connection');
 
 const PROJECT_ROOT = path.join(__dirname, '..', '..', '..');
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp']);
+const VARIANT_PRICE_OFFSETS = {
+    'De base': 0,
+    Bleu: 125000,
+    Vert: 235000
+};
 
 const getOrderedFileRank = (fileName) => {
     const match = fileName.match(/^(\d+)-/);
@@ -152,6 +157,148 @@ exports.getAllCars = () => {
             enrichCarsWithVariants(results)
                 .then(resolve)
                 .catch(reject);
+        });
+    });
+};
+
+exports.createOrder = ({ customerName, address, items }) => {
+    return new Promise((resolve, reject) => {
+        if (!items.length) {
+            reject(new Error('EMPTY_ORDER'));
+            return;
+        }
+
+        const vehicleIds = items.map((item) => item.id);
+        const placeholders = vehicleIds.map(() => '?').join(',');
+        const sql = `
+            SELECT id, nom_modele, prix, stock_quantity, promotion_percent
+            FROM vehicules
+            WHERE id IN (${placeholders})
+            FOR UPDATE
+        `;
+
+        db.beginTransaction((transactionError) => {
+            if (transactionError) {
+                reject(transactionError);
+                return;
+            }
+
+            db.query(sql, vehicleIds, (selectError, vehicles) => {
+                if (selectError) {
+                    return db.rollback(() => reject(selectError));
+                }
+
+                const vehiclesById = vehicles.reduce((acc, vehicle) => {
+                    acc[vehicle.id] = vehicle;
+                    return acc;
+                }, {});
+
+                const normalizedItems = [];
+                for (const item of items) {
+                    const vehicle = vehiclesById[item.id];
+                    if (!vehicle) {
+                        return db.rollback(() => reject(new Error(`UNKNOWN_VEHICLE_${item.id}`)));
+                    }
+
+                    if (vehicle.stock_quantity < item.quantity) {
+                        return db.rollback(() => reject(new Error(`OUT_OF_STOCK_${vehicle.id}`)));
+                    }
+
+                    const variantOffset = VARIANT_PRICE_OFFSETS[item.variantName] || 0;
+                    const discountedBasePrice = Number(vehicle.prix) * (1 - Number(vehicle.promotion_percent || 0) / 100);
+                    const finalUnitPrice = discountedBasePrice + variantOffset;
+
+                    normalizedItems.push({
+                        id: vehicle.id,
+                        nom_modele: vehicle.nom_modele,
+                        quantity: Number(item.quantity),
+                        variantName: item.variantName || 'De base',
+                        unitPrice: Number(finalUnitPrice.toFixed(2))
+                    });
+                }
+
+                const totalAmount = normalizedItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+                const insertOrderSql = `
+                    INSERT INTO commandes (
+                        customer_name,
+                        address_line1,
+                        address_line2,
+                        postal_code,
+                        city,
+                        country,
+                        total_amount
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                `;
+
+                db.query(
+                    insertOrderSql,
+                    [
+                        customerName,
+                        address.line1,
+                        address.line2 || null,
+                        address.postalCode,
+                        address.city,
+                        address.country,
+                        totalAmount
+                    ],
+                    (orderError, orderResult) => {
+                        if (orderError) {
+                            return db.rollback(() => reject(orderError));
+                        }
+
+                        const orderId = orderResult.insertId;
+                        const itemValues = normalizedItems.map((item) => [
+                            orderId,
+                            item.id,
+                            item.variantName,
+                            item.quantity,
+                            item.unitPrice
+                        ]);
+
+                        db.query(
+                            'INSERT INTO commande_items (commande_id, vehicule_id, variant_name, quantity, unit_price) VALUES ?',
+                            [itemValues],
+                            (itemsError) => {
+                                if (itemsError) {
+                                    return db.rollback(() => reject(itemsError));
+                                }
+
+                                const stockUpdates = normalizedItems.map((item) => new Promise((stockResolve, stockReject) => {
+                                    db.query(
+                                        'UPDATE vehicules SET stock_quantity = stock_quantity - ? WHERE id = ?',
+                                        [item.quantity, item.id],
+                                        (updateError) => {
+                                            if (updateError) {
+                                                stockReject(updateError);
+                                            } else {
+                                                stockResolve();
+                                            }
+                                        }
+                                    );
+                                }));
+
+                                Promise.all(stockUpdates)
+                                    .then(() => {
+                                        db.commit((commitError) => {
+                                            if (commitError) {
+                                                return db.rollback(() => reject(commitError));
+                                            }
+
+                                            resolve({
+                                                orderId,
+                                                totalAmount,
+                                                items: normalizedItems
+                                            });
+                                        });
+                                    })
+                                    .catch((stockError) => {
+                                        db.rollback(() => reject(stockError));
+                                    });
+                            }
+                        );
+                    }
+                );
+            });
         });
     });
 };

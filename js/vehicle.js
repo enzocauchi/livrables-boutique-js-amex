@@ -96,7 +96,7 @@ function renderColorButtons() {
             renderColorButtons();
             renderSpriteStrip(variant);
             if (priceNode) {
-                priceNode.textContent = `¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(currentCar.prix, variant.nom))}`;
+                priceNode.textContent = `¥${BoutiqueApp.formatPrice(BoutiqueApp.getFinalPrice(currentCar.prix, variant.nom, currentCar.promotion_percent))}`;
             }
         });
         container.appendChild(button);
@@ -127,8 +127,8 @@ function renderVehicle(car) {
             <p class="vehicle-id">ID vehicule #${car.id}</p>
             <p class="lead">${getVehicleLore(car)}</p>
             <div class="price-line">
-                <span class="price price-value">¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, activeVariantName))}</span>
-                <span class="availability">Disponible immediatement</span>
+                <span class="price price-value">¥${BoutiqueApp.formatPrice(BoutiqueApp.getFinalPrice(car.prix, activeVariantName, car.promotion_percent))}</span>
+                <span class="availability">Stock ${car.stock_quantity} • ${Number(car.promotion_percent || 0) > 0 ? `Promotion -${car.promotion_percent}%` : 'Sans promotion'}</span>
             </div>
             <div class="color-picker">
                 <p>Choisir une couleur</p>
@@ -160,6 +160,10 @@ function renderVehicle(car) {
                     <span>Sprites actifs</span>
                     <strong class="sprite-count">${getActiveVariant()?.sprites?.length || 1}</strong>
                 </article>
+                <article>
+                    <span>Stock</span>
+                    <strong>${car.stock_quantity}</strong>
+                </article>
             </div>
             <div class="detail-card">
                 <h2>Informations</h2>
@@ -184,7 +188,9 @@ function renderVehicle(car) {
         BoutiqueApp.addToCart(
             {
                 ...car,
-                prix: BoutiqueApp.getVariantPrice(car.prix, variant?.nom || 'De base'),
+                base_price: Number(car.prix),
+                promotion_percent: Number(car.promotion_percent || 0),
+                prix: BoutiqueApp.getFinalPrice(car.prix, variant?.nom || 'De base', car.promotion_percent),
                 image_url: variant?.sprites?.[0] || variant?.image_url || car.image_url
             },
             variant?.nom || 'De base'
@@ -211,6 +217,11 @@ async function fetchVehicle() {
     for (const baseUrl of API_CANDIDATES) {
         try {
             const response = await fetch(`${baseUrl}/voiture/${vehicleId}`);
+            if (response.status === 404) {
+                window.location.href = '404.html';
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
@@ -225,7 +236,7 @@ async function fetchVehicle() {
         }
     }
 
-    page.innerHTML = `<div class="loading">Impossible de charger ce vehicule : ${lastError?.message || 'Erreur inconnue'}</div>`;
+    window.location.href = `api-error.html?message=${encodeURIComponent(lastError?.message || 'Erreur API')}`;
 }
 
 BoutiqueApp.applySavedTheme();

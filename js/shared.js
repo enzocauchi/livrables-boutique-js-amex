@@ -2,6 +2,7 @@ const BoutiqueApp = (() => {
     const THEME_KEY = 'garage-theme';
     const CART_KEY = 'garage-cart';
     const FAVORITES_KEY = 'garage-favorites';
+    const ADDRESS_KEY = 'garage-address';
     const VARIANT_PRICE_OFFSETS = {
         'De base': 0,
         Bleu: 125000,
@@ -111,8 +112,16 @@ const BoutiqueApp = (() => {
         return new Intl.NumberFormat('fr-FR').format(Number(value) || 0);
     }
 
+    function getDiscountedBasePrice(basePrice, promotionPercent = 0) {
+        return Number(basePrice) * (1 - Number(promotionPercent || 0) / 100);
+    }
+
     function getVariantPrice(basePrice, variantName) {
         return Number(basePrice) + (VARIANT_PRICE_OFFSETS[variantName] || 0);
+    }
+
+    function getFinalPrice(basePrice, variantName, promotionPercent = 0) {
+        return getVariantPrice(getDiscountedBasePrice(basePrice, promotionPercent), variantName);
     }
 
     function getAssetUrl(path, apiBase = null) {
@@ -147,12 +156,27 @@ const BoutiqueApp = (() => {
         return selectedVariant?.image_url || car?.image_url || '';
     }
 
+    function getSavedAddress() {
+        try {
+            return JSON.parse(localStorage.getItem(ADDRESS_KEY) || '{}');
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function saveAddress(address) {
+        localStorage.setItem(ADDRESS_KEY, JSON.stringify(address));
+    }
+
     return {
         API_ROOTS,
         addToCart,
         applySavedTheme,
+        getDiscountedBasePrice,
+        getFinalPrice,
         formatPrice,
         getAssetUrl,
+        getSavedAddress,
         getCart,
         getDefaultVariant,
         getFavorites,
@@ -160,6 +184,7 @@ const BoutiqueApp = (() => {
         getVariantPrice,
         initThemeToggle,
         isFavorite,
+        saveAddress,
         saveCart,
         saveFavorites,
         toggleFavorite,

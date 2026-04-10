@@ -60,6 +60,7 @@ function renderCatalogue() {
         const variant = BoutiqueApp.getDefaultVariant(car);
         const imageUrl = BoutiqueApp.getPrimaryImage(car, 'De base');
         const favoriteState = BoutiqueApp.isFavorite(car.id);
+        const finalPrice = BoutiqueApp.getFinalPrice(car.prix, variant?.nom || 'De base', car.promotion_percent);
         const card = document.createElement('article');
         card.className = 'catalog-card';
         card.innerHTML = `
@@ -73,11 +74,12 @@ function renderCatalogue() {
                 <h3>${car.nom_modele}</h3>
                 <p>${car.constructeur || 'Constructeur inconnu'} • ${car.categorie || 'Vehicule'}</p>
                 <div class="catalog-meta">
-                    <span>${car.variantes?.length || 0} couleurs</span>
-                    <strong>¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, variant?.nom || 'De base'))}</strong>
+                    <span>${car.variantes?.length || 0} couleurs • Stock ${car.stock_quantity}</span>
+                    <strong>¥${BoutiqueApp.formatPrice(finalPrice)}</strong>
                 </div>
+                ${Number(car.promotion_percent || 0) > 0 ? `<p class="catalog-promo">Promotion active : -${car.promotion_percent}%</p>` : ''}
                 <div class="catalog-actions">
-                    <button class="add-cart-button" type="button">Ajouter</button>
+                    <button class="add-cart-button" type="button" ${Number(car.stock_quantity) <= 0 ? 'disabled' : ''}>${Number(car.stock_quantity) <= 0 ? 'Rupture' : 'Ajouter'}</button>
                     <a href="vehicle.html?id=${car.id}">Voir</a>
                 </div>
             </div>
@@ -88,7 +90,9 @@ function renderCatalogue() {
             BoutiqueApp.addToCart(
                 {
                     ...car,
-                    prix: BoutiqueApp.getVariantPrice(car.prix, currentVariant),
+                    base_price: Number(car.prix),
+                    promotion_percent: Number(car.promotion_percent || 0),
+                    prix: BoutiqueApp.getFinalPrice(car.prix, currentVariant, car.promotion_percent),
                     image_url: imageUrl || car.image_url
                 },
                 currentVariant
@@ -129,7 +133,7 @@ async function fetchCars() {
         }
     }
 
-    grid.innerHTML = `<p>Impossible de charger le catalogue : ${lastError?.message || 'Erreur inconnue'}</p>`;
+    window.location.href = `api-error.html?message=${encodeURIComponent(lastError?.message || 'Erreur API')}`;
 }
 
 BoutiqueApp.applySavedTheme();

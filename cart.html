@@ -55,15 +55,40 @@
         <div class="cart-items" id="cartItems"></div>
         <aside class="cart-summary">
             <h3>Resume</h3>
+            <div class="delivery-form">
+                <h4>Livraison</h4>
+                <input id="customerName" type="text" placeholder="Nom complet">
+                <input id="addressLine1" type="text" placeholder="Adresse">
+                <input id="addressLine2" type="text" placeholder="Complement d'adresse">
+                <div class="form-row">
+                    <input id="postalCode" type="text" placeholder="Code postal">
+                    <input id="city" type="text" placeholder="Ville">
+                </div>
+                <input id="country" type="text" placeholder="Pays">
+                <label class="remember-address">
+                    <input id="rememberAddress" type="checkbox" checked>
+                    <span>Retenir cette adresse</span>
+                </label>
+            </div>
             <div class="summary-row">
                 <span>Vehicules</span>
                 <strong id="summaryCount">0</strong>
             </div>
             <div class="summary-row">
+                <span>Sous-total</span>
+                <strong id="summarySubtotal">¥0</strong>
+            </div>
+            <div class="summary-row">
+                <span>Promotions</span>
+                <strong id="summaryDiscount">-¥0</strong>
+            </div>
+            <div class="summary-row total-row">
                 <span>Total</span>
                 <strong id="summaryTotal">¥0</strong>
             </div>
-            <a class="checkout-link" href="catalogue.html">Continuer mes achats</a>
+            <button class="checkout-link" id="checkoutButton" type="button">Passer la commande</button>
+            <a class="secondary-link" href="catalogue.html">Continuer mes achats</a>
+            <p class="checkout-status" id="checkoutStatus"></p>
         </aside>
     </section>
 </main>
