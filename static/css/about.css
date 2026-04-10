@@ -22,6 +22,7 @@ body.light-theme {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { min-height: 100vh; background: linear-gradient(180deg, rgba(14, 20, 34, 0.9), rgba(5, 7, 13, 0.97)), var(--bg); color: var(--text); font-family: Arial, sans-serif; }
+body.light-theme { background: radial-gradient(circle at top right, rgba(17, 17, 17, 0.08), transparent 22%), linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(244, 241, 230, 0.98)), var(--bg); }
 header, .about-page { padding-left: 60px; padding-right: 60px; }
 header { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
 .header-nav, .header-actions { display: flex; align-items: center; gap: 22px; }

@@ -122,6 +122,7 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
 }
 
 .hero-card {
+    position: relative;
     border-radius: 18px;
     overflow: hidden;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent), #090d14;
@@ -133,6 +134,39 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
     height: 520px;
     object-fit: cover;
     display: block;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(5, 7, 13, 0.72);
+    color: var(--text);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.prev-arrow {
+    left: 16px;
+}
+
+.next-arrow {
+    right: 16px;
+}
+
+.hero-counter {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(5, 7, 13, 0.72);
+    color: var(--text);
+    font-size: 12px;
 }
 
 .sprite-strip {
@@ -188,6 +222,13 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
     margin-bottom: 12px;
 }
 
+.vehicle-id {
+    margin-bottom: 14px;
+    color: var(--accent);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+}
+
 .lead {
     color: var(--muted);
     line-height: 1.7;
@@ -229,6 +270,7 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
 
 .actions-row {
     display: flex;
+    align-items: center;
     gap: 12px;
     margin-bottom: 24px;
 }
@@ -242,6 +284,13 @@ body[data-page="vehicle"] .header-nav a[href="index.html"] {
     padding: 0 18px;
     border-radius: 12px;
     text-decoration: none;
+}
+
+.actions-row .favorite-button {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    background: var(--bg-soft);
 }
 
 .primary-action {

@@ -7,6 +7,7 @@ const vehicleId = params.get('id');
 let activeApiBase = 'http://localhost:8080';
 let currentCar = null;
 let activeVariantName = 'De base';
+let activeSpriteIndex = 0;
 
 function getAssetUrl(path) {
     if (!path) return '';
@@ -33,13 +34,18 @@ function getActiveVariant() {
 function renderSpriteStrip(variant) {
     const strip = page.querySelector('.sprite-strip');
     const heroImage = page.querySelector('.hero-image');
+    const heroCounter = page.querySelector('.hero-counter');
     const spriteCount = page.querySelector('.sprite-count');
     const sprites = variant?.sprites?.length ? variant.sprites : [variant?.image_url || currentCar.image_url];
 
-    heroImage.src = getAssetUrl(sprites[0]);
+    activeSpriteIndex = Math.min(activeSpriteIndex, sprites.length - 1);
+    heroImage.src = getAssetUrl(sprites[activeSpriteIndex]);
     heroImage.alt = `${currentCar.nom_modele} ${variant.nom}`;
     if (spriteCount) {
         spriteCount.textContent = sprites.length;
+    }
+    if (heroCounter) {
+        heroCounter.textContent = `${activeSpriteIndex + 1}/${sprites.length}`;
     }
 
     strip.innerHTML = '';
@@ -54,7 +60,11 @@ function renderSpriteStrip(variant) {
         `;
 
         button.addEventListener('click', () => {
+            activeSpriteIndex = index;
             heroImage.src = getAssetUrl(sprite);
+            if (heroCounter) {
+                heroCounter.textContent = `${activeSpriteIndex + 1}/${sprites.length}`;
+            }
             page.querySelectorAll('.sprite-card').forEach((node) => node.classList.remove('active'));
             button.classList.add('active');
         });
@@ -63,8 +73,16 @@ function renderSpriteStrip(variant) {
     });
 }
 
+function updateHeroImage(direction) {
+    const variant = getActiveVariant();
+    const sprites = variant?.sprites?.length ? variant.sprites : [variant?.image_url || currentCar.image_url];
+    activeSpriteIndex = (activeSpriteIndex + direction + sprites.length) % sprites.length;
+    renderSpriteStrip(variant);
+}
+
 function renderColorButtons() {
     const container = page.querySelector('.color-buttons');
+    const priceNode = page.querySelector('.price-value');
     container.innerHTML = '';
 
     (currentCar.variantes || []).forEach((variant) => {
@@ -74,8 +92,12 @@ function renderColorButtons() {
         button.textContent = variant.nom;
         button.addEventListener('click', () => {
             activeVariantName = variant.nom;
+            activeSpriteIndex = 0;
             renderColorButtons();
             renderSpriteStrip(variant);
+            if (priceNode) {
+                priceNode.textContent = `¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(currentCar.prix, variant.nom))}`;
+            }
         });
         container.appendChild(button);
     });
@@ -88,16 +110,24 @@ function renderVehicle(car) {
     page.innerHTML = `
         <div class="visual-panel">
             <div class="hero-card">
+                <button class="carousel-arrow prev-arrow" type="button" aria-label="Image precedente">
+                    <span>‹</span>
+                </button>
                 <img class="hero-image" src="" alt="${car.nom_modele}">
+                <button class="carousel-arrow next-arrow" type="button" aria-label="Image suivante">
+                    <span>›</span>
+                </button>
+                <span class="hero-counter">1/3</span>
             </div>
             <div class="sprite-strip"></div>
         </div>
         <div class="info-panel">
             <p class="collection-tag">${car.constructeur || 'Constructeur inconnu'}</p>
             <h1>${car.nom_modele}</h1>
+            <p class="vehicle-id">ID vehicule #${car.id}</p>
             <p class="lead">${getVehicleLore(car)}</p>
             <div class="price-line">
-                <span class="price">¥${BoutiqueApp.formatPrice(car.prix)}</span>
+                <span class="price price-value">¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, activeVariantName))}</span>
                 <span class="availability">Disponible immediatement</span>
             </div>
             <div class="color-picker">
@@ -105,6 +135,11 @@ function renderVehicle(car) {
                 <div class="color-buttons"></div>
             </div>
             <div class="actions-row">
+                <button class="favorite-button detail-favorite${BoutiqueApp.isFavorite(car.id) ? ' is-active' : ''}" type="button" aria-label="Ajouter aux favoris">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
+                    </svg>
+                </button>
                 <button class="primary-action" type="button">Ajouter au panier</button>
                 <a class="secondary-action" href="catalogue.html">Retour catalogue</a>
             </div>
@@ -137,12 +172,20 @@ function renderVehicle(car) {
         </div>
     `;
 
+    page.querySelector('.prev-arrow').addEventListener('click', () => updateHeroImage(-1));
+    page.querySelector('.next-arrow').addEventListener('click', () => updateHeroImage(1));
+    page.querySelector('.detail-favorite').addEventListener('click', (event) => {
+        const nextState = BoutiqueApp.toggleFavorite(car.id);
+        event.currentTarget.classList.toggle('is-active', nextState);
+    });
+
     page.querySelector('.primary-action').addEventListener('click', (event) => {
         const variant = getActiveVariant();
         BoutiqueApp.addToCart(
             {
                 ...car,
-                image_url: variant?.image_url || car.image_url
+                prix: BoutiqueApp.getVariantPrice(car.prix, variant?.nom || 'De base'),
+                image_url: variant?.sprites?.[0] || variant?.image_url || car.image_url
             },
             variant?.nom || 'De base'
         );
@@ -188,4 +231,5 @@ async function fetchVehicle() {
 BoutiqueApp.applySavedTheme();
 BoutiqueApp.initThemeToggle();
 BoutiqueApp.updateCartCount();
+BoutiqueApp.updateFavoriteCount();
 fetchVehicle();

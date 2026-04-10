@@ -5,6 +5,11 @@ const db = require('../database/connection');
 const PROJECT_ROOT = path.join(__dirname, '..', '..', '..');
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp']);
 
+const getOrderedFileRank = (fileName) => {
+    const match = fileName.match(/^(\d+)-/);
+    return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+};
+
 const getVariantSprites = async (imageUrl) => {
     if (!imageUrl) {
         return [];
@@ -18,12 +23,12 @@ const getVariantSprites = async (imageUrl) => {
         const sprites = files
             .filter((file) => IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase()))
             .sort((left, right) => {
-                const leftIsMain = `${relativeDir}/${left}` === imageUrl;
-                const rightIsMain = `${relativeDir}/${right}` === imageUrl;
+                const rankDiff = getOrderedFileRank(left) - getOrderedFileRank(right);
+                if (rankDiff !== 0) {
+                    return rankDiff;
+                }
 
-                if (leftIsMain) return -1;
-                if (rightIsMain) return 1;
-                return left.localeCompare(right);
+                return left.localeCompare(right, undefined, { numeric: true });
             })
             .map((file) => `${relativeDir}/${file}`);
 
@@ -71,16 +76,22 @@ const enrichCarsWithVariants = (cars) => {
                     acc[variant.vehicule_id].push({
                         id: variant.id,
                         nom: variant.nom,
-                        image_url: variant.image_url,
+                        image_url: variant.sprites[0] || variant.image_url,
                         sprites: variant.sprites
                     });
                     return acc;
                 }, {});
 
-                resolve(cars.map((car) => ({
-                    ...car,
-                    variantes: variantsByCarId[car.id] || []
-                })));
+                resolve(cars.map((car) => {
+                    const carVariants = variantsByCarId[car.id] || [];
+                    const baseVariant = carVariants.find((variant) => variant.nom === 'De base') || carVariants[0];
+
+                    return {
+                        ...car,
+                        image_url: baseVariant?.sprites?.[0] || baseVariant?.image_url || car.image_url,
+                        variantes: carVariants
+                    };
+                }));
             } catch (error) {
                 reject(error);
             }

@@ -1,4 +1,5 @@
 const API_CANDIDATES = BoutiqueApp.API_ROOTS.map((root) => `${root}/api/voitures`);
+const params = new URLSearchParams(window.location.search);
 
 let activeApiBase = 'http://localhost:8080';
 let catalogueCars = [];
@@ -20,7 +21,12 @@ function getAssetUrl(path) {
 
 function getFilteredCars() {
     const query = searchInput.value.trim().toLowerCase();
+    const favoritesOnly = params.get('view') === 'favorites';
     let cars = catalogueCars.filter((car) => {
+        if (favoritesOnly && !BoutiqueApp.isFavorite(car.id)) {
+            return false;
+        }
+
         if (!query) return true;
         const haystack = [
             car.nom_modele,
@@ -51,33 +57,52 @@ function renderCatalogue() {
     }
 
     cars.forEach((car) => {
-        const variant = car.variantes?.find((item) => item.nom === 'De base') || car.variantes?.[0];
+        const variant = BoutiqueApp.getDefaultVariant(car);
+        const imageUrl = BoutiqueApp.getPrimaryImage(car, 'De base');
+        const favoriteState = BoutiqueApp.isFavorite(car.id);
         const card = document.createElement('article');
         card.className = 'catalog-card';
         card.innerHTML = `
-            <img src="${getAssetUrl(car.image_url || variant?.image_url)}" alt="${car.nom_modele}">
+            <button class="favorite-button catalog-favorite${favoriteState ? ' is-active' : ''}" type="button" aria-label="Ajouter aux favoris">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
+                </svg>
+            </button>
+            <img src="${getAssetUrl(imageUrl || car.image_url)}" alt="${car.nom_modele}">
             <div class="catalog-body">
                 <h3>${car.nom_modele}</h3>
                 <p>${car.constructeur || 'Constructeur inconnu'} • ${car.categorie || 'Vehicule'}</p>
                 <div class="catalog-meta">
                     <span>${car.variantes?.length || 0} couleurs</span>
-                    <strong>¥${BoutiqueApp.formatPrice(car.prix)}</strong>
+                    <strong>¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, variant?.nom || 'De base'))}</strong>
                 </div>
                 <div class="catalog-actions">
-                    <button type="button">Ajouter</button>
+                    <button class="add-cart-button" type="button">Ajouter</button>
                     <a href="vehicle.html?id=${car.id}">Voir</a>
                 </div>
             </div>
         `;
 
-        card.querySelector('button').addEventListener('click', () => {
+        card.querySelector('.add-cart-button').addEventListener('click', () => {
+            const currentVariant = variant?.nom || 'De base';
             BoutiqueApp.addToCart(
                 {
                     ...car,
-                    image_url: variant?.image_url || car.image_url
+                    prix: BoutiqueApp.getVariantPrice(car.prix, currentVariant),
+                    image_url: imageUrl || car.image_url
                 },
-                variant?.nom || 'De base'
+                currentVariant
             );
+        });
+
+        card.querySelector('.catalog-favorite').addEventListener('click', (event) => {
+            event.stopPropagation();
+            const nextState = BoutiqueApp.toggleFavorite(car.id);
+            event.currentTarget.classList.toggle('is-active', nextState);
+            BoutiqueApp.updateFavoriteCount();
+            if (params.get('view') === 'favorites') {
+                renderCatalogue();
+            }
         });
 
         grid.appendChild(card);
@@ -110,6 +135,7 @@ async function fetchCars() {
 BoutiqueApp.applySavedTheme();
 BoutiqueApp.initThemeToggle();
 BoutiqueApp.updateCartCount();
+BoutiqueApp.updateFavoriteCount();
 searchInput.addEventListener('input', renderCatalogue);
 sortSelect.addEventListener('change', renderCatalogue);
 fetchCars();

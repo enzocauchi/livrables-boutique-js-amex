@@ -48,9 +48,9 @@ function getVisibleCars() {
 function createCard(car) {
     const rarity = car.rarity || 'LÉGENDAIRE';
     const badgeClass = rarity.toLowerCase();
-    const defaultVariant = Array.isArray(car.variantes)
-        ? car.variantes.find((variant) => variant.nom === 'De base') || car.variantes[0]
-        : null;
+    const defaultVariant = BoutiqueApp.getDefaultVariant(car);
+    const defaultImage = BoutiqueApp.getPrimaryImage(car, 'De base');
+    const isFavorite = BoutiqueApp.isFavorite(car.id);
 
     const card = document.createElement('article');
     card.className = 'card';
@@ -77,8 +77,24 @@ function createCard(car) {
     badge.textContent = rarity.toUpperCase();
     card.appendChild(badge);
 
+    const favoriteButton = document.createElement('button');
+    favoriteButton.type = 'button';
+    favoriteButton.className = `favorite-button card-favorite${isFavorite ? ' is-active' : ''}`;
+    favoriteButton.setAttribute('aria-label', 'Ajouter aux favoris');
+    favoriteButton.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
+        </svg>
+    `;
+    favoriteButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const nextState = BoutiqueApp.toggleFavorite(car.id);
+        favoriteButton.classList.toggle('is-active', nextState);
+    });
+    card.appendChild(favoriteButton);
+
     const img = document.createElement('img');
-    img.src = getAssetUrl(car.image_url || defaultVariant?.image_url);
+    img.src = getAssetUrl(defaultImage || car.image_url);
     img.alt = car.nom_modele;
     card.appendChild(img);
 
@@ -103,7 +119,7 @@ function createCard(car) {
 
     const price = document.createElement('span');
     price.className = 'price';
-    price.textContent = `¥${BoutiqueApp.formatPrice(car.prix)}`;
+    price.textContent = `¥${BoutiqueApp.formatPrice(BoutiqueApp.getVariantPrice(car.prix, defaultVariant?.nom || 'De base'))}`;
     bottom.appendChild(price);
 
     const btn = document.createElement('button');
@@ -113,7 +129,14 @@ function createCard(car) {
     btn.addEventListener('click', (event) => {
         event.stopPropagation();
         const variant = defaultVariant?.nom || 'De base';
-        BoutiqueApp.addToCart(car, variant);
+        BoutiqueApp.addToCart(
+            {
+                ...car,
+                prix: BoutiqueApp.getVariantPrice(car.prix, variant),
+                image_url: defaultImage || car.image_url
+            },
+            variant
+        );
         btn.textContent = 'Ajoute';
         window.setTimeout(() => {
             btn.textContent = 'Ajouter';
@@ -189,5 +212,6 @@ async function fetchCars() {
 BoutiqueApp.applySavedTheme();
 BoutiqueApp.initThemeToggle();
 BoutiqueApp.updateCartCount();
+BoutiqueApp.updateFavoriteCount();
 setupFilters();
 fetchCars();

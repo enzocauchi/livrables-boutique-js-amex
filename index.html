@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyberpunk 2077 - Garage</title>
     <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/common.css">
 </head>
 
 <body data-page="home">
 
 <!-- HEADER -->
-<header>
-    <div>
+<header class="site-header">
+    <a class="brand-mark" href="index.html">
         <h1>CyberPunk 2077</h1>
-    </div>
+    </a>
 
     <nav class="header-nav">
-        <a href="index.html">Home</a>
+        <a href="index.html" aria-current="page">Home</a>
         <a href="catalogue.html">Catalogue</a>
         <a href="about.html">A Propos</a>
     </nav>
@@ -33,6 +34,12 @@
                 <path d="M12 3a9 9 0 1 0 0 18"></path>
             </svg>
         </button>
+        <a class="icon-button" href="catalogue.html?view=favorites" aria-label="Favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
+            </svg>
+            <span class="favorite-count" data-favorite-count>0</span>
+        </a>
         <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
             <svg viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="9" cy="19" r="1.5"></circle>
@@ -80,9 +87,6 @@
         </div>
         <div class="filter-pills" id="brandFilters">
             <button class="filter-pill active" type="button" data-brand="Tous">Tous</button>
-            <button class="filter-pill" type="button" data-brand="Arch">Arch</button>
-            <button class="filter-pill" type="button" data-brand="Brennan">Brennan</button>
-            <button class="filter-pill" type="button" data-brand="Yaiba">Yaiba</button>
             <button class="filter-pill" type="button" data-brand="Archer">Archer</button>
             <button class="filter-pill" type="button" data-brand="Chevillon">Chevillon</button>
             <button class="filter-pill" type="button" data-brand="Herrera">Herrera</button>

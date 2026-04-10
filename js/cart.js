@@ -64,4 +64,5 @@ function renderCart() {
 
 BoutiqueApp.applySavedTheme();
 BoutiqueApp.initThemeToggle();
+BoutiqueApp.updateFavoriteCount();
 renderCart();

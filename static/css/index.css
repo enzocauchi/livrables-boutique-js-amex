@@ -382,6 +382,13 @@ section p:last-child {
     backdrop-filter: blur(8px);
 }
 
+.card-favorite {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 1;
+}
+
 .legendary {
     background: rgba(255, 212, 0, 0.15);
     color: var(--accent);

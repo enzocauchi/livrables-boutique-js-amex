@@ -1,6 +1,12 @@
 const BoutiqueApp = (() => {
     const THEME_KEY = 'garage-theme';
     const CART_KEY = 'garage-cart';
+    const FAVORITES_KEY = 'garage-favorites';
+    const VARIANT_PRICE_OFFSETS = {
+        'De base': 0,
+        Bleu: 125000,
+        Vert: 235000
+    };
 
     const API_ROOTS = [
         window.location.origin,
@@ -67,8 +73,46 @@ const BoutiqueApp = (() => {
         });
     }
 
+    function getFavorites() {
+        try {
+            return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveFavorites(favorites) {
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        updateFavoriteCount();
+    }
+
+    function isFavorite(carId) {
+        return getFavorites().includes(carId);
+    }
+
+    function toggleFavorite(carId) {
+        const favorites = getFavorites();
+        const nextFavorites = favorites.includes(carId)
+            ? favorites.filter((id) => id !== carId)
+            : [...favorites, carId];
+
+        saveFavorites(nextFavorites);
+        return nextFavorites.includes(carId);
+    }
+
+    function updateFavoriteCount() {
+        const count = getFavorites().length;
+        document.querySelectorAll('[data-favorite-count]').forEach((node) => {
+            node.textContent = count;
+        });
+    }
+
     function formatPrice(value) {
         return new Intl.NumberFormat('fr-FR').format(Number(value) || 0);
+    }
+
+    function getVariantPrice(basePrice, variantName) {
+        return Number(basePrice) + (VARIANT_PRICE_OFFSETS[variantName] || 0);
     }
 
     function getAssetUrl(path, apiBase = null) {
@@ -84,6 +128,25 @@ const BoutiqueApp = (() => {
         return `${root}/static/${normalizedPath}`;
     }
 
+    function getDefaultVariant(car) {
+        const variants = car?.variantes || [];
+        return variants.find((variant) => variant.nom === 'De base') || variants[0] || null;
+    }
+
+    function getPrimaryImage(car, preferredVariantName = null) {
+        const variants = car?.variantes || [];
+        const preferredVariant = preferredVariantName
+            ? variants.find((variant) => variant.nom === preferredVariantName)
+            : null;
+        const selectedVariant = preferredVariant || getDefaultVariant(car);
+
+        if (selectedVariant?.sprites?.length) {
+            return selectedVariant.sprites[0];
+        }
+
+        return selectedVariant?.image_url || car?.image_url || '';
+    }
+
     return {
         API_ROOTS,
         addToCart,
@@ -91,8 +154,16 @@ const BoutiqueApp = (() => {
         formatPrice,
         getAssetUrl,
         getCart,
+        getDefaultVariant,
+        getFavorites,
+        getPrimaryImage,
+        getVariantPrice,
         initThemeToggle,
+        isFavorite,
         saveCart,
-        updateCartCount
+        saveFavorites,
+        toggleFavorite,
+        updateCartCount,
+        updateFavoriteCount
     };
 })();
