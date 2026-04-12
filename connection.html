@@ -1,55 +1,129 @@
-<>
-
-
-  <meta charSet="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CyberPunk 2077 — Connexion</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="static/css/connection.css" />
-
-
- 
-  <div className="card">
-    { /* Coins décoratifs */ }
-    <div className="corner tl" />
-    <div className="corner tr" />
-    <div className="corner bl" />
-    <div className="corner br" />
- 
-    { /* Formulaire de connexion */ }
-    <div id="login-form">
-      <p className="tag">CyberPunk 2077</p>
-      <h1 className="title">Connexion</h1>
- 
-      <div id="msg-error" className="msg error" />
-      <div id="msg-success" className="msg success" />
- 
-      <div className="field">
-        <label htmlFor="username">Identifiant</label>
-        <input type="text" id="username" placeholder="ex: V_2077" autoComplete="username" />
-      </div>
- 
-      <div className="field">
-        <label htmlFor="password">Mot de passe</label>
-        <input type="password" id="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" autoComplete="current-password" />
-      </div>
- 
-      <button className="btn-primary" id="login-btn">// Accéder au système</button>
- 
-      <p className="hint">test : admin / 1234</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 2077 - Connexion</title>
+    <link rel="stylesheet" href="static/css/connection.css">
+    <link rel="stylesheet" href="static/css/common.css">
+</head>
+<body data-page="connection">
+<header class="site-header">
+    <a class="brand-mark" href="index.html"><h1>CyberPunk 2077</h1></a>
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">A Propos</a>
+    </nav>
+    <div class="header-actions">
+        <a class="icon-button" href="catalogue.html" aria-label="Rechercher">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6"></circle>
+                <path d="M20 20l-4.2-4.2"></path>
+            </svg>
+        </a>
+        <button class="icon-button theme-toggle" type="button" aria-label="Changer le theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18"></path>
+                <path d="M12 3a9 9 0 1 0 0 18"></path>
+            </svg>
+        </button>
+        <a class="icon-button" href="catalogue.html?view=favorites" aria-label="Favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
+            </svg>
+            <span class="favorite-count" data-favorite-count>0</span>
+        </a>
+        <a class="icon-button cart-link" href="cart.html" aria-label="Panier">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="19" r="1.5"></circle>
+                <circle cx="17" cy="19" r="1.5"></circle>
+                <path d="M3 5h2l2.3 9h9.7l2-7H7.3"></path>
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+        </a>
     </div>
- 
-    { /* Vue connectée */ }
-    <div id="dashboard">
-      <div className="avatar-initials" id="avatar">V</div>
-      <p className="welcome-name" id="welcome-name" />
-      <p className="welcome-sub">// accès autorisé</p>
-      <hr className="divider" />
-      <button className="btn-outline" id="logout-btn">// Déconnexion</button>
-    </div>
-  </div>
- 
-  <script src="script.js" />
+</header>
 
-</>
+<main class="connection-page">
+    <section class="connection-container">
+        <div class="connection-card">
+            <p class="eyebrow">// AUTHENTIFICATION</p>
+            <h1>Connexion</h1>
+
+            <!-- Formulaire de connexion -->
+            <div id="login-form" class="login-form">
+                <div id="msg-error" class="message error"></div>
+                <div id="msg-success" class="message success"></div>
+
+                <div class="form-group">
+                    <label for="username">Identifiant</label>
+                    <input type="text" id="username" placeholder="Entrez votre identifiant" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Entrez votre mot de passe" autocomplete="current-password">
+                </div>
+
+                <button class="primary-action" id="login-btn" type="button">Accéder au système</button>
+
+                <p class="hint">Demo: admin / 1234</p>
+                
+                <div class="form-footer">
+                    <p>Pas encore de compte ?</p>
+                    <button class="link-button" id="toggle-signup-btn" type="button">Créer un compte</button>
+                </div>
+            </div>
+
+            <!-- Formulaire d'inscription -->
+            <div id="signup-form" class="login-form" style="display: none;">
+                <div id="msg-error-signup" class="message error"></div>
+                <div id="msg-success-signup" class="message success"></div>
+
+                <div class="form-group">
+                    <label for="signup-username">Identifiant</label>
+                    <input type="text" id="signup-username" placeholder="Choisissez un identifiant" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="Votre adresse email" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Mot de passe</label>
+                    <input type="password" id="signup-password" placeholder="Créez un mot de passe" autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password-confirm">Confirmer le mot de passe</label>
+                    <input type="password" id="signup-password-confirm" placeholder="Confirmez votre mot de passe" autocomplete="new-password">
+                </div>
+
+                <button class="primary-action" id="signup-btn" type="button">Créer mon compte</button>
+
+                <div class="form-footer">
+                    <p>Vous avez déjà un compte ?</p>
+                    <button class="link-button" id="toggle-login-btn" type="button">Se connecter</button>
+                </div>
+            </div>
+
+            <!-- Dashboard après connexion -->
+            <div id="dashboard" class="dashboard" style="display: none;">
+                <div class="avatar-container">
+                    <div class="avatar" id="avatar"></div>
+                </div>
+                <p class="welcome-name" id="welcome-name"></p>
+                <p class="welcome-sub">// accès autorisé</p>
+                <hr class="divider">
+                <button class="secondary-action" id="logout-btn" type="button">Déconnexion</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="js/shared.js"></script>
+<script src="js/connection.js"></script>
+</body>
+</html>

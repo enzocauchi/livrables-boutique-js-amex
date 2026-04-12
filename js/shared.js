@@ -50,19 +50,25 @@ const BoutiqueApp = (() => {
     function addToCart(car, variantName = 'De base') {
         const cart = getCart();
         const existingItem = cart.find((item) => item.id === car.id && item.variantName === variantName);
+        const maxStock = car.stock_quantity || 0;
 
         if (existingItem) {
-            existingItem.quantity += 1;
+            if (existingItem.quantity < maxStock) {
+                existingItem.quantity += 1;
+            }
         } else {
-            cart.push({
-                id: car.id,
-                nom_modele: car.nom_modele,
-                constructeur: car.constructeur,
-                prix: car.prix,
-                image_url: car.image_url,
-                variantName,
-                quantity: 1
-            });
+            if (maxStock > 0) {
+                cart.push({
+                    id: car.id,
+                    nom_modele: car.nom_modele,
+                    constructeur: car.constructeur,
+                    prix: car.prix,
+                    image_url: car.image_url,
+                    variantName,
+                    quantity: 1,
+                    stock_quantity: maxStock
+                });
+            }
         }
 
         saveCart(cart);
