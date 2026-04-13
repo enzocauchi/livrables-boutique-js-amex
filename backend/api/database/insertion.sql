@@ -18,10 +18,10 @@ INSERT IGNORE INTO constructeurs (id, nom) VALUES
 -- 3. INSERTION DES VEHICULES
 -- ==========================================
 INSERT INTO vehicules (id, nom_modele, image_url, category_id, constructeur_id, prix, stock_quantity, promotion_percent) VALUES
-(1, 'Quartz bandit', 'static/Images/Voiture/Archer/Quartz bandit/De bse/1-photomode_23032026_090217.png', 2, 4, 9800000, 7, 0),
+(1, 'Quartz bandit', 'static/Images/Voiture/Archer/Quartz bandit/De base/1-photomode_23032026_090217.png', 2, 4, 9800000, 7, 0),
 (2, 'Quartz specter', 'static/Images/Voiture/Archer/Quartz specter/De base/1-photomode_23032026_090411.png', 2, 4, 10800000, 5, 10),
 (3, 'Emperor', 'static/Images/Voiture/Chevillon/Emperor/De base/1-photomode_20032026_121456.png', 2, 5, 9500000, 4, 5),
-(4, 'Legatu µ', 'static/Images/Voiture/Chevillon/Legatu µ/De base/1-photomode_20032026_121720.png', 2, 5, 8900000, 6, 0),
+(4, 'Legatu', 'static/Images/Voiture/Chevillon/Legatu/De base/1-photomode_20032026_121720.png', 2, 5, 8900000, 6, 0),
 (5, 'Outlaw', 'static/Images/Voiture/Herrera/Outlaw/De base/1-photomode_20032026_122050.png', 2, 6, 7800000, 8, 15),
 (6, 'Supron', 'static/Images/Voiture/Mahir/Supron/De base/1-photomode_23032026_093654.png', 2, 7, 8700000, 9, 0),
 (7, 'Supron F 23', 'static/Images/Voiture/Mahir/Supron F 23/De base/1-Gemini_Generated_Image_hasdhhhasdhhhasd.png', 2, 7, 9000000, 4, 8),
@@ -46,7 +46,7 @@ INSERT INTO vehicules (id, nom_modele, image_url, category_id, constructeur_id, 
 -- ==========================================
 INSERT INTO variantes (vehicule_id, image_url, nom) VALUES
 (1, 'static/Images/Voiture/Archer/Quartz bandit/Bleu/1-Gemini_Generated_Image_ug6abvug6abvug6a.png', 'Bleu'),
-(1, 'static/Images/Voiture/Archer/Quartz bandit/De bse/1-photomode_23032026_090217.png', 'De base'),
+(1, 'static/Images/Voiture/Archer/Quartz bandit/De base/1-photomode_23032026_090217.png', 'De base'),
 (1, 'static/Images/Voiture/Archer/Quartz bandit/vert/1-Gemini_Generated_Image_6chqaa6chqaa6chq.png', 'Vert'),
 (2, 'static/Images/Voiture/Archer/Quartz specter/Bleu/1-Gemini_Generated_Image_kx7bq9kx7bq9kx7b.png', 'Bleu'),
 (2, 'static/Images/Voiture/Archer/Quartz specter/De base/1-photomode_23032026_090411.png', 'De base'),
@@ -54,9 +54,9 @@ INSERT INTO variantes (vehicule_id, image_url, nom) VALUES
 (3, 'static/Images/Voiture/Chevillon/Emperor/Bleu/1-Gemini_Generated_Image_ohxa2xohxa2xohxa.png', 'Bleu'),
 (3, 'static/Images/Voiture/Chevillon/Emperor/De base/1-photomode_20032026_121456.png', 'De base'),
 (3, 'static/Images/Voiture/Chevillon/Emperor/Vert/1-Gemini_Generated_Image_g20sh4g20sh4g20s.png', 'Vert'),
-(4, 'static/Images/Voiture/Chevillon/Legatu µ/Bleu/1-Gemini_Generated_Image_qlk0e2qlk0e2qlk0.png', 'Bleu'),
-(4, 'static/Images/Voiture/Chevillon/Legatu µ/De base/1-photomode_20032026_121720.png', 'De base'),
-(4, 'static/Images/Voiture/Chevillon/Legatu µ/Vert/1-Gemini_Generated_Image_qz57muqz57muqz57.png', 'Vert'),
+(4, 'static/Images/Voiture/Chevillon/Legatu/Bleu/1-Gemini_Generated_Image_qlk0e2qlk0e2qlk0.png', 'Bleu'),
+(4, 'static/Images/Voiture/Chevillon/Legatu/De base/1-photomode_20032026_121720.png', 'De base'),
+(4, 'static/Images/Voiture/Chevillon/Legatu/Vert/1-Gemini_Generated_Image_qz57muqz57muqz57.png', 'Vert'),
 (5, 'static/Images/Voiture/Herrera/Outlaw/Bleu/1-Gemini_Generated_Image_gtb2gtb2gtb2gtb2.png', 'Bleu'),
 (5, 'static/Images/Voiture/Herrera/Outlaw/De base/1-photomode_20032026_122050.png', 'De base'),
 (5, 'static/Images/Voiture/Herrera/Outlaw/Vert/1-Gemini_Generated_Image_nc15renc15renc15.png', 'Vert'),
