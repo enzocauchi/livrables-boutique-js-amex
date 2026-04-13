@@ -167,7 +167,7 @@ const BoutiqueApp = (() => {
     }
 
     // Generate candidate asset paths to try when an image 404s. This helps fix
-    // common typos (e.g. "De bse" instead of "De base") or missing leading
+    // common typos (e.g. "De bse" instead of "De bse") or missing leading
     // numbers in filenames (e.g. "photomode_..png" -> "1-photomode_..png").
     function generateAssetCandidates(originalPath) {
         if (!originalPath) return [''];
@@ -176,12 +176,12 @@ const BoutiqueApp = (() => {
         // Always try the original first
         candidates.push(originalPath);
 
-        // Fix common typo "De bse" -> "De base"
+        // Fix common typo "De bse" -> "De bse"
         if (originalPath.includes('De bse')) {
             candidates.push(originalPath.replace('De bse', 'De base'));
         }
 
-        // Ensure folder name is exactly "De base" when case differs
+        // Ensure folder name is exactly "De bse" when case differs
         if (originalPath.includes('De base') === false && /De\s+base/i.test(originalPath)) {
             candidates.push(originalPath.replace(/De\s+base/i, 'De base'));
         }

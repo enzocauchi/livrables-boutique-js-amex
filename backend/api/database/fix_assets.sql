@@ -2,27 +2,27 @@
 -- Run this in phpMyAdmin (SQL tab) while using database `boutique` (or prepend 'USE boutique;')
 
 -- 1) Fix typos in stored paths
-UPDATE variantes SET image_url = REPLACE(image_url, 'De bse', 'De base') WHERE image_url LIKE '%De bse%';
-UPDATE vehicules SET image_url = REPLACE(image_url, 'De bse', 'De base') WHERE image_url LIKE '%De bse%';
+UPDATE variantes SET image_url = REPLACE(image_url, 'De bse', 'De bse') WHERE image_url LIKE '%De bse%';
+UPDATE vehicules SET image_url = REPLACE(image_url, 'De bse', 'De bse') WHERE image_url LIKE '%De bse%';
 
-UPDATE variantes SET image_url = REPLACE(image_url, 'Legatu µ', 'Legatu') WHERE image_url LIKE '%Legatu µ%';
-UPDATE vehicules SET image_url = REPLACE(image_url, 'Legatu µ', 'Legatu') WHERE image_url LIKE '%Legatu µ%';
+UPDATE variantes SET image_url = REPLACE(image_url, 'Legatu µ µ', 'Legatu µ') WHERE image_url LIKE '%Legatu µ µ%';
+UPDATE vehicules SET image_url = REPLACE(image_url, 'Legatu µ µ', 'Legatu µ') WHERE image_url LIKE '%Legatu µ µ%';
 
 -- 2) Ensure variants exist for Rayfield Aerondight (vehicule_id = 11) and Rayfield caliburn (vehicule_id = 12)
 -- Add each image only if an identical record does not already exist for that vehicule_id/image_url.
 
 -- Aerondight (vehicule_id = 11)
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De base/1-Gemini_Generated_Image_t4ekd7t4ekd7t4ek.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De base/1-Gemini_Generated_Image_t4ekd7t4ekd7t4ek.png');
+SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De bse/1-Gemini_Generated_Image_t4ekd7t4ekd7t4ek.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De bse/1-Gemini_Generated_Image_t4ekd7t4ekd7t4ek.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De base/2-Gemini_Generated_Image_ohapl9ohapl9ohap.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De base/2-Gemini_Generated_Image_ohapl9ohapl9ohap.png');
+SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De bse/2-Gemini_Generated_Image_ohapl9ohapl9ohap.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De bse/2-Gemini_Generated_Image_ohapl9ohapl9ohap.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De base/3-Gemini_Generated_Image_frmfkvfrmfkvfrmf.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De base/3-Gemini_Generated_Image_frmfkvfrmfkvfrmf.png');
+SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/De bse/3-Gemini_Generated_Image_frmfkvfrmfkvfrmf.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url = 'static/Images/Voiture/Rayfield/Aerondight/De bse/3-Gemini_Generated_Image_frmfkvfrmfkvfrmf.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
 SELECT 11, 'static/Images/Voiture/Rayfield/Aerondight/Bleu/1-photomode_23032026_094445.png', 'Bleu'
@@ -50,16 +50,16 @@ WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 11 AND image_url =
 
 -- caliburn (vehicule_id = 12)
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De base/1-photomode_23032026_094725.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De base/1-photomode_23032026_094725.png');
+SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De bse/1-photomode_23032026_094725.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De bse/1-photomode_23032026_094725.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De base/2-photomode_23032026_094740.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De base/2-photomode_23032026_094740.png');
+SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De bse/2-photomode_23032026_094740.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De bse/2-photomode_23032026_094740.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
-SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De base/3-photomode_23032026_094756.png', 'De base'
-WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De base/3-photomode_23032026_094756.png');
+SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/De bse/3-photomode_23032026_094756.png', 'De bse'
+WHERE NOT EXISTS (SELECT 1 FROM variantes WHERE vehicule_id = 12 AND image_url = 'static/Images/Voiture/Rayfield/caliburn/De bse/3-photomode_23032026_094756.png');
 
 INSERT INTO variantes (vehicule_id, image_url, nom)
 SELECT 12, 'static/Images/Voiture/Rayfield/caliburn/Bleu/1-Gemini_Generated_Image_4jbo2t4jbo2t4jbo.png', 'Bleu'
