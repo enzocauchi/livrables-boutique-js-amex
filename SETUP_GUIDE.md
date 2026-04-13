@@ -94,6 +94,8 @@ Une fois le serveur démarré sur http://localhost:8080:
 GET /api/voitures              → Tous les véhicules
 GET /api/voiture/:id           → Détails d'un véhicule
 POST /api/commandes            → Créer une commande
+POST /api/auth/register        → Créer un compte utilisateur
+POST /api/auth/login           → Se connecter avec identifiant ou email
 ```
 
 ---
@@ -199,6 +201,14 @@ vehicules (table principale)
 ├── prix
 ├── stock_quantity ⭐ (NOUVEAU)
 └── promotion_percent ⭐ (NOUVEAU)
+
+users (authentification)
+├── id (PK)
+├── username (unique)
+├── email (unique)
+├── password_hash
+├── salt
+└── created_at
 
 commandes (orders)
 ├── id (PK)

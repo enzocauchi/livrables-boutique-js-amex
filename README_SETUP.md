@@ -30,6 +30,8 @@ Open `index.html` in browser or use live server
 - `GET /api/voitures` - All vehicles
 - `GET /api/voiture/:id` - Vehicle details  
 - `POST /api/commandes` - Create order
+- `POST /api/auth/register` - Create an account
+- `POST /api/auth/login` - Login with username or email
 
 ## Testing
 

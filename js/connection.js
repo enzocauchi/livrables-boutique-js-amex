@@ -13,9 +13,7 @@ const successMsg = document.querySelector('#msg-success');
 // Signup Elements
 const signupBtn = document.querySelector('#signup-btn');
 const signupUsernameInput = document.querySelector('#signup-username');
-const signupEmailInput = document.querySelector('#signup-email');
 const signupPasswordInput = document.querySelector('#signup-password');
-const signupPasswordConfirmInput = document.querySelector('#signup-password-confirm');
 const errorMsgSignup = document.querySelector('#msg-error-signup');
 const successMsgSignup = document.querySelector('#msg-success-signup');
 
@@ -30,8 +28,13 @@ const welcomeNameEl = document.querySelector('#welcome-name');
 
 // Constants
 const DEMO_CREDENTIALS = { username: 'admin', password: '1234' };
+const DEMO_ACCOUNTS = [
+    DEMO_CREDENTIALS,
+    { username: 'V_2077', password: 'night_city' }
+];
 const STORAGE_KEY = 'auth_user';
 const ACCOUNTS_KEY = 'user_accounts';
+const AUTH_CANDIDATES = BoutiqueApp.API_ROOTS.map((root) => `${root}/api/auth`);
 
 // Utility Functions
 function showError(message, isSignup = false) {
@@ -61,10 +64,17 @@ function hideMessages(isSignup = false) {
 }
 
 function formatUsername(username) {
+    if (!username) {
+        return '';
+    }
+
     return username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
 }
 
-function showDashboard(username) {
+function showDashboard(user) {
+    const account = typeof user === 'string' ? { username: user } : user;
+    const username = account.username || '';
+
     loginForm.style.display = 'none';
     signupForm.style.display = 'none';
     dashboard.style.display = 'grid';
@@ -73,7 +83,11 @@ function showDashboard(username) {
     avatarEl.textContent = firstLetter;
     welcomeNameEl.textContent = `Bienvenue ${formatUsername(username)}`;
     
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ username, timestamp: Date.now() }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        username,
+        email: account.email || '',
+        timestamp: Date.now()
+    }));
 }
 
 function showLoginForm() {
@@ -91,9 +105,7 @@ function showSignupForm() {
     loginForm.style.display = 'none';
     signupForm.style.display = 'grid';
     signupUsernameInput.value = '';
-    signupEmailInput.value = '';
     signupPasswordInput.value = '';
-    signupPasswordConfirmInput.value = '';
     hideMessages(true);
     signupUsernameInput.focus();
 }
@@ -111,17 +123,80 @@ function saveAccounts(accounts) {
     localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
 }
 
-function accountExists(username) {
-    const accounts = getStoredAccounts();
-    return username.toLowerCase() in accounts;
+function normalizeAccountKey(value) {
+    return String(value || '').trim().toLowerCase();
 }
 
-function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+function accountExists(username) {
+    const accounts = getStoredAccounts();
+    return normalizeAccountKey(username) in accounts;
+}
+
+function findLegacyAccount(identifier, password) {
+    const accounts = getStoredAccounts();
+    const normalizedIdentifier = normalizeAccountKey(identifier);
+
+    return Object.values(accounts).find((account) => {
+        return (
+            (normalizeAccountKey(account.username) === normalizedIdentifier || normalizeAccountKey(account.email) === normalizedIdentifier) &&
+            account.password === password
+        );
+    }) || null;
+}
+
+function saveLegacyAccount(username, email, password) {
+    const accounts = getStoredAccounts();
+    accounts[normalizeAccountKey(username)] = { username, email, password };
+    saveAccounts(accounts);
+}
+
+function buildGeneratedEmail(username) {
+    return `${normalizeAccountKey(username) || 'user'}@cyberpunk.local`;
+}
+
+function isDemoCredential(username, password) {
+    return DEMO_ACCOUNTS.some((account) => {
+        return normalizeAccountKey(account.username) === normalizeAccountKey(username) && account.password === password;
+    });
+}
+
+async function requestAuth(endpoint, payload) {
+    let lastError = null;
+
+    for (const baseUrl of AUTH_CANDIDATES) {
+        try {
+            const response = await fetch(`${baseUrl}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                return data;
+            }
+
+            const error = new Error(data.error || data.message || 'Une erreur est survenue');
+            error.status = response.status;
+            error.payload = data;
+            throw error;
+        } catch (error) {
+            lastError = error;
+
+            if (error.status) {
+                throw error;
+            }
+        }
+    }
+
+    throw lastError || new Error('Impossible de contacter le serveur');
 }
 
 // Login Handler
-loginBtn.addEventListener('click', () => {
+loginBtn.addEventListener('click', async () => {
     const username = usernameInput.value.trim();
     const password = passwordInput.value;
     
@@ -138,36 +213,48 @@ loginBtn.addEventListener('click', () => {
     }
     
     // Check demo account
-    if (username === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password) {
+    if (isDemoCredential(username, password)) {
         showSuccess('Connexion réussie !', false);
         setTimeout(() => {
             showDashboard(username);
         }, 600);
         return;
     }
-    
-    // Check user accounts
-    const accounts = getStoredAccounts();
-    const userKey = username.toLowerCase();
-    if (userKey in accounts && accounts[userKey].password === password) {
+
+    try {
+        const response = await requestAuth('/login', {
+            identifier: username,
+            password
+        });
+
+        const account = response.user || { username };
+        saveLegacyAccount(account.username || username, account.email || '', password);
         showSuccess('Connexion réussie !', false);
         setTimeout(() => {
-            showDashboard(username);
+            showDashboard(account);
         }, 600);
         return;
+    } catch (error) {
+        const legacyAccount = findLegacyAccount(username, password);
+
+        if (legacyAccount) {
+            showSuccess('Connexion réussie !', false);
+            setTimeout(() => {
+                showDashboard(legacyAccount);
+            }, 600);
+            return;
+        }
+
+        showError(error.status === 401 ? 'Identifiant ou mot de passe incorrect' : 'Connexion impossible pour le moment', false);
+        passwordInput.value = '';
+        passwordInput.focus();
     }
-    
-    showError('Identifiant ou mot de passe incorrect', false);
-    passwordInput.value = '';
-    passwordInput.focus();
 });
 
 // Signup Handler
-signupBtn.addEventListener('click', () => {
+signupBtn.addEventListener('click', async () => {
     const username = signupUsernameInput.value.trim();
-    const email = signupEmailInput.value.trim();
     const password = signupPasswordInput.value;
-    const passwordConfirm = signupPasswordConfirmInput.value;
     
     hideMessages(true);
     
@@ -181,16 +268,6 @@ signupBtn.addEventListener('click', () => {
         return;
     }
     
-    if (!email) {
-        showError('Entrez votre email', true);
-        return;
-    }
-    
-    if (!validateEmail(email)) {
-        showError('Entrez une adresse email valide', true);
-        return;
-    }
-    
     if (!password) {
         showError('Entrez un mot de passe', true);
         return;
@@ -201,27 +278,55 @@ signupBtn.addEventListener('click', () => {
         return;
     }
     
-    if (password !== passwordConfirm) {
-        showError('Les mots de passe ne correspondent pas', true);
+    if (DEMO_ACCOUNTS.some((account) => normalizeAccountKey(account.username) === normalizeAccountKey(username))) {
+        showError('Cet identifiant est réservé', true);
         return;
     }
-    
+
     if (accountExists(username)) {
         showError('Cet identifiant existe déjà', true);
         return;
     }
     
-    // Create account
-    const accounts = getStoredAccounts();
-    accounts[username.toLowerCase()] = { username, email, password };
-    saveAccounts(accounts);
-    
-    showSuccess('Compte créé avec succès ! Redirection...', true);
-    setTimeout(() => {
-        showLoginForm();
-        usernameInput.value = username;
-        usernameInput.focus();
-    }, 1200);
+    try {
+        const response = await requestAuth('/register', {
+            username,
+            password
+        });
+
+        const createdUser = response.user || { username, email: buildGeneratedEmail(username) };
+        saveLegacyAccount(createdUser.username || username, createdUser.email || buildGeneratedEmail(username), password);
+
+        showSuccess('Compte créé avec succès ! Redirection...', true);
+        setTimeout(() => {
+            showLoginForm();
+            usernameInput.value = createdUser.username || username;
+            usernameInput.focus();
+        }, 1200);
+    } catch (error) {
+        if (error.status === 409) {
+            showError(error.payload?.error || 'Cet identifiant existe déjà', true);
+            return;
+        }
+
+        const localAccounts = getStoredAccounts();
+        const localKey = normalizeAccountKey(username);
+
+        if (localAccounts[localKey]) {
+            showError('Cet identifiant existe déjà', true);
+            return;
+        }
+
+        localAccounts[localKey] = { username, email: buildGeneratedEmail(username), password };
+        saveAccounts(localAccounts);
+
+        showSuccess('Compte créé en local. Redirection...', true);
+        setTimeout(() => {
+            showLoginForm();
+            usernameInput.value = username;
+            usernameInput.focus();
+        }, 1200);
+    }
 });
 
 // Toggle Handlers
@@ -242,12 +347,6 @@ logoutBtn.addEventListener('click', () => {
 passwordInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         loginBtn.click();
-    }
-});
-
-signupPasswordConfirmInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        signupBtn.click();
     }
 });
 
