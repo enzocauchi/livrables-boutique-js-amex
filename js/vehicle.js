@@ -13,9 +13,12 @@ function getAssetUrl(path) {
     if (!path) return '';
     if (path.startsWith('http')) return path;
 
-    const normalizedPath = path.startsWith('static/')
-        ? path.slice('static/'.length)
-        : path.replace(/^\/+/, '');
+    // Prefer local static paths when provided so sprites work without a backend
+    if (path.startsWith('static/')) {
+        return encodeURI(path);
+    }
+
+    const normalizedPath = path.replace(/^\/+/, '');
 
     return `${activeApiBase}/static/${encodeURI(normalizedPath)}`;
 }

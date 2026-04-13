@@ -14,9 +14,14 @@ function getAssetUrl(path) {
     if (!path) return '';
     if (path.startsWith('http')) return path;
 
-    const normalizedPath = path.startsWith('static/')
-        ? path.slice('static/'.length)
-        : path.replace(/^\/+/, '');
+    // If the asset path already points to the local static folder, use a relative URL
+    // This allows the app to work when served as static files (no backend) and avoids
+    // unnecessary cross-origin requests to an API host for static images.
+    if (path.startsWith('static/')) {
+        return encodeURI(path);
+    }
+
+    const normalizedPath = path.replace(/^\/+/, '');
 
     return `${activeApiBase}/static/${encodeURI(normalizedPath)}`;
 }

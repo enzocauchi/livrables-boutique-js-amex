@@ -12,9 +12,12 @@ function getAssetUrl(path) {
     if (!path) return '';
     if (path.startsWith('http')) return path;
 
-    const normalizedPath = path.startsWith('static/')
-        ? path.slice('static/'.length)
-        : path.replace(/^\/+/, '');
+    // Use relative static path when provided so images work without a backend server
+    if (path.startsWith('static/')) {
+        return encodeURI(path);
+    }
+
+    const normalizedPath = path.replace(/^\/+/, '');
 
     return `${activeApiBase}/static/${encodeURI(normalizedPath)}`;
 }

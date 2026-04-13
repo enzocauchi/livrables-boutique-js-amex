@@ -135,11 +135,14 @@ const BoutiqueApp = (() => {
         if (!path) return '';
         if (path.startsWith('http')) return path;
 
+        // If path already targets the local static folder, return it as a relative URL
+        if (path.startsWith('static/')) {
+            return encodeURI(path);
+        }
+
         const root = apiBase
             || (window.location.origin.startsWith('http') ? window.location.origin : 'http://localhost:8080');
-        const normalizedPath = path.startsWith('static/')
-            ? path.slice('static/'.length)
-            : path.replace(/^\/+/, '');
+        const normalizedPath = path.replace(/^\/+/, '');
 
         return `${root}/static/${encodeURI(normalizedPath)}`;
     }
