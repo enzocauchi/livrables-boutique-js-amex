@@ -17,7 +17,7 @@ function getAssetUrl(path) {
         ? path.slice('static/'.length)
         : path.replace(/^\/+/, '');
 
-    return `${activeApiBase}/static/${normalizedPath}`;
+    return `${activeApiBase}/static/${encodeURI(normalizedPath)}`;
 }
 
 function getVehicleLore(car) {

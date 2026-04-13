@@ -141,7 +141,7 @@ const BoutiqueApp = (() => {
             ? path.slice('static/'.length)
             : path.replace(/^\/+/, '');
 
-        return `${root}/static/${normalizedPath}`;
+        return `${root}/static/${encodeURI(normalizedPath)}`;
     }
 
     function getDefaultVariant(car) {
