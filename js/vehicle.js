@@ -42,7 +42,7 @@ function renderSpriteStrip(variant) {
     const sprites = variant?.sprites?.length ? variant.sprites : [variant?.image_url || currentCar.image_url];
 
     activeSpriteIndex = Math.min(activeSpriteIndex, sprites.length - 1);
-    heroImage.src = getAssetUrl(sprites[activeSpriteIndex]);
+    BoutiqueApp.setImageWithFallback(heroImage, sprites[activeSpriteIndex]);
     heroImage.alt = `${currentCar.nom_modele} ${variant.nom}`;
     if (spriteCount) {
         spriteCount.textContent = sprites.length;
@@ -58,13 +58,16 @@ function renderSpriteStrip(variant) {
         button.type = 'button';
         button.className = `sprite-card${index === activeSpriteIndex ? ' active' : ''}`;
         button.innerHTML = `
-            <img src="${getAssetUrl(sprite)}" alt="${currentCar.nom_modele} ${variant.nom} sprite ${index + 1}">
+            <img src="" data-sprite alt="${currentCar.nom_modele} ${variant.nom} sprite ${index + 1}">
             <span>Sprite ${index + 1}</span>
         `;
 
+        const imgNode = button.querySelector('[data-sprite]');
+        BoutiqueApp.setImageWithFallback(imgNode, sprite);
+
         button.addEventListener('click', () => {
             activeSpriteIndex = index;
-            heroImage.src = getAssetUrl(sprite);
+            BoutiqueApp.setImageWithFallback(heroImage, sprite);
             if (heroCounter) {
                 heroCounter.textContent = `${activeSpriteIndex + 1}/${sprites.length}`;
             }

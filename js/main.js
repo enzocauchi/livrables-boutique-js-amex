@@ -100,7 +100,7 @@ function createCard(car) {
     card.appendChild(favoriteButton);
 
     const img = document.createElement('img');
-    img.src = getAssetUrl(defaultImage || car.image_url);
+    BoutiqueApp.setImageWithFallback(img, defaultImage || car.image_url);
     img.alt = car.nom_modele;
     card.appendChild(img);
 

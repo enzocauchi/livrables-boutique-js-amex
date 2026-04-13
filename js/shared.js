@@ -166,6 +166,60 @@ const BoutiqueApp = (() => {
         return selectedVariant?.image_url || car?.image_url || '';
     }
 
+    // Generate candidate asset paths to try when an image 404s. This helps fix
+    // common typos (e.g. "De bse" instead of "De base") or missing leading
+    // numbers in filenames (e.g. "photomode_..png" -> "1-photomode_..png").
+    function generateAssetCandidates(originalPath) {
+        if (!originalPath) return [''];
+
+        const candidates = [];
+        // Always try the original first
+        candidates.push(originalPath);
+
+        // Fix common typo "De bse" -> "De base"
+        if (originalPath.includes('De bse')) {
+            candidates.push(originalPath.replace('De bse', 'De base'));
+        }
+
+        // Ensure folder name is exactly "De base" when case differs
+        if (originalPath.includes('De base') === false && /De\s+base/i.test(originalPath)) {
+            candidates.push(originalPath.replace(/De\s+base/i, 'De base'));
+        }
+
+        // If filename doesn't start with a numeric prefix like "1-", add "1-" before the filename
+        const lastSlash = originalPath.lastIndexOf('/');
+        if (lastSlash !== -1) {
+            const dir = originalPath.slice(0, lastSlash + 1);
+            const file = originalPath.slice(lastSlash + 1);
+            if (!/^\d+-/.test(file)) {
+                candidates.push(`${dir}1-${file}`);
+            }
+        }
+
+        // Deduplicate while preserving order
+        return Array.from(new Set(candidates));
+    }
+
+    // Set image src with fallback attempts on error. Uses BoutiqueApp.getAssetUrl for URL building.
+    function setImageWithFallback(imgElement, rawPath) {
+        if (!imgElement) return;
+        const candidates = generateAssetCandidates(rawPath);
+        let attemptIndex = 0;
+
+        function tryNext() {
+            if (attemptIndex >= candidates.length) return;
+            const candidate = candidates[attemptIndex++];
+            const url = getAssetUrl(candidate);
+            // attach handler to move to next candidate on error
+            imgElement.onerror = () => {
+                tryNext();
+            };
+            imgElement.src = url;
+        }
+
+        tryNext();
+    }
+
     function getSavedAddress() {
         try {
             return JSON.parse(localStorage.getItem(ADDRESS_KEY) || '{}');
@@ -214,6 +268,9 @@ const BoutiqueApp = (() => {
         getFinalPrice,
         formatPrice,
         getAssetUrl,
+        // new helpers
+        generateAssetCandidates,
+        setImageWithFallback,
         getSavedAddress,
         getCart,
         getDefaultVariant,

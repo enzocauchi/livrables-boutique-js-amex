@@ -72,7 +72,7 @@ function renderCatalogue() {
                     <path d="M12 20.5l-7.2-7.1a4.6 4.6 0 0 1 6.5-6.5L12 7.6l0.7-0.7a4.6 4.6 0 1 1 6.5 6.5z"></path>
                 </svg>
             </button>
-            <img src="${getAssetUrl(imageUrl || car.image_url)}" alt="${car.nom_modele}">
+            <img src="" data-image alt="${car.nom_modele}">
             <div class="catalog-body">
                 <h3>${car.nom_modele}</h3>
                 <p>${car.constructeur || 'Constructeur inconnu'} • ${car.categorie || 'Vehicule'}</p>
@@ -111,6 +111,10 @@ function renderCatalogue() {
                 renderCatalogue();
             }
         });
+
+        // Set image using fallback helper
+        const imgNode = card.querySelector('[data-image]');
+        BoutiqueApp.setImageWithFallback(imgNode, imageUrl || car.image_url);
 
         grid.appendChild(card);
     });
