@@ -147,8 +147,8 @@ exports.getAllCars = () => {
                 c.nom AS categorie,
                 con.nom AS constructeur
             FROM vehicules v
-                LEFT JOIN categories c ON v.category_id = c.id
-                LEFT JOIN constructeurs con ON v.constructeur_id = con.id
+                     LEFT JOIN categories c ON v.category_id = c.id
+                     LEFT JOIN constructeurs con ON v.constructeur_id = con.id
             ORDER BY v.id
         `;
 
