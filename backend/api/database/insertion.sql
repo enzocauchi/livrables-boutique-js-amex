@@ -33,7 +33,13 @@ INSERT INTO vehicules (id, nom_modele, image_url, category_id, constructeur_id, 
 (13, 'Colby', 'static/Images/Voiture/Thorton/Colby/De base/1-photomode_23032026_095019.png', 2, 14, 9300000, 10, 0),
 (14, 'Galena', 'static/Images/Voiture/Thorton/Galena/De base/1-Gemini_Generated_Image_7uhrt77uhrt77uhr.png', 2, 14, 9800000, 6, 6),
 (15, 'Columbus', 'static/Images/Voiture/Villefort/Columbus/De base/1-photomode_23032026_095527.png', 2, 15, 8500000, 7, 0),
-(16, 'Cortes', 'static/Images/Voiture/Villefort/Cortes/De base/1-photomode_23032026_095818.png', 2, 15, 8700000, 5, 9);
+(16, 'Cortes', 'static/Images/Voiture/Villefort/Cortes/De base/1-photomode_23032026_095818.png', 2, 15, 8700000, 5, 9),
+(17, 'Riptide', 'static/Images/Voiture/Herrera/Riptide/De base/Gemini_Generated_Image_7j0h5y7j0h5y7j0h.png', 2, 6, 7200000, 6, 5),
+(18, 'Tanishi', 'static/Images/Voiture/Makigai/Tanishi/De base/photomode_12042026_185330.png', 2, 8, 6200000, 7, 0),
+(19, 'Hozuki', 'static/Images/Voiture/Mizutani/Hozuki/De base/Gemini_Generated_Image_69butx69butx69bu.png', 2, 10, 7600000, 5, 8),
+(20, 'Shion', 'static/Images/Voiture/Mizutani/Shion/De base/photomode_12042026_185018.png', 2, 10, 8300000, 4, 0),
+(21, 'Sport', 'static/Images/Voiture/Quadra/Sport/De base/photomode_12042026_184713.png', 2, 12, 8200000, 6, 10),
+(22, 'Turbo', 'static/Images/Voiture/Quadra/Turbo/De base/Gemini_Generated_Image_n31c12n31c12n31c.png', 2, 12, 12500000, 3, 12);
 
 -- ==========================================
 -- 4. INSERTION DES VARIANTES
@@ -86,4 +92,22 @@ INSERT INTO variantes (vehicule_id, image_url, nom) VALUES
 (15, 'static/Images/Voiture/Villefort/Columbus/Vert/1-Gemini_Generated_Image_wv91l8wv91l8wv91.png', 'Vert'),
 (16, 'static/Images/Voiture/Villefort/Cortes/Bleu/1-Gemini_Generated_Image_5y5gjj5y5gjj5y5g.png', 'Bleu'),
 (16, 'static/Images/Voiture/Villefort/Cortes/De base/1-photomode_23032026_095818.png', 'De base'),
-(16, 'static/Images/Voiture/Villefort/Cortes/Vert/1-Gemini_Generated_Image_b09of5b09of5b09o.png', 'Vert');
+(16, 'static/Images/Voiture/Villefort/Cortes/Vert/1-Gemini_Generated_Image_b09of5b09of5b09o.png', 'Vert'),
+(17, 'static/Images/Voiture/Herrera/Riptide/Bleu/photomode_12042026_184210.png', 'Bleu'),
+(17, 'static/Images/Voiture/Herrera/Riptide/De base/Gemini_Generated_Image_7j0h5y7j0h5y7j0h.png', 'De base'),
+(17, 'static/Images/Voiture/Herrera/Riptide/Vert/Gemini_Generated_Image_ie6uo7ie6uo7ie6u.png', 'Vert'),
+(18, 'static/Images/Voiture/Makigai/Tanishi/Bleu/Gemini_Generated_Image_7ep5627ep5627ep5.png', 'Bleu'),
+(18, 'static/Images/Voiture/Makigai/Tanishi/De base/photomode_12042026_185330.png', 'De base'),
+(18, 'static/Images/Voiture/Makigai/Tanishi/Vert/Gemini_Generated_Image_5zatqw5zatqw5zat.png', 'Vert'),
+(19, 'static/Images/Voiture/Mizutani/Hozuki/Bleu/Gemini_Generated_Image_7d43557d43557d43.png', 'Bleu'),
+(19, 'static/Images/Voiture/Mizutani/Hozuki/De base/Gemini_Generated_Image_69butx69butx69bu.png', 'De base'),
+(19, 'static/Images/Voiture/Mizutani/Hozuki/Vert/photomode_12042026_185152.png', 'Vert'),
+(20, 'static/Images/Voiture/Mizutani/Shion/Bleu/Gemini_Generated_Image_22lj6222lj6222lj.png', 'Bleu'),
+(20, 'static/Images/Voiture/Mizutani/Shion/De base/photomode_12042026_185018.png', 'De base'),
+(20, 'static/Images/Voiture/Mizutani/Shion/Vert/Gemini_Generated_Image_51sl6v51sl6v51sl.png', 'Vert'),
+(21, 'static/Images/Voiture/Quadra/Sport/Bleu/Gemini_Generated_Image_2apclm2apclm2apc.png', 'Bleu'),
+(21, 'static/Images/Voiture/Quadra/Sport/De base/photomode_12042026_184713.png', 'De base'),
+(21, 'static/Images/Voiture/Quadra/Sport/Vert/Gemini_Generated_Image_k1b3ark1b3ark1b3.png', 'Vert'),
+(22, 'static/Images/Voiture/Quadra/Turbo/Bleu/photomode_12042026_184518.png', 'Bleu'),
+(22, 'static/Images/Voiture/Quadra/Turbo/De base/Gemini_Generated_Image_n31c12n31c12n31c.png', 'De base'),
+(22, 'static/Images/Voiture/Quadra/Turbo/Vert/Gemini_Generated_Image_su5en5su5en5su5e.png', 'Vert');
