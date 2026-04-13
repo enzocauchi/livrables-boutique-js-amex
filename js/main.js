@@ -161,6 +161,7 @@ function createCard(car) {
 }
 
 function renderCars(cars) {
+    console.log('Rendering cars, count=', cars.length);
     resultsText.textContent = `${cars.length} OBJETS TROUVÉS`;
     grid.innerHTML = '';
 
@@ -170,7 +171,11 @@ function renderCars(cars) {
     }
 
     cars.forEach((car) => {
-        grid.appendChild(createCard(car));
+        try {
+            grid.appendChild(createCard(car));
+        } catch (err) {
+            console.error('Error rendering car', car && car.id, err);
+        }
     });
 }
 
@@ -207,6 +212,7 @@ async function fetchCars() {
             }
 
             allCars = await response.json();
+            console.log('Fetched cars from', url, 'count=', Array.isArray(allCars) ? allCars.length : 0);
             const parsedUrl = new URL(url);
             activeApiBase = `${parsedUrl.protocol}//${parsedUrl.host}`;
             refreshGrid();
